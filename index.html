@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umut İnce — Portfolio | YBS & E-Ticaret Stratejisti</title>
+  <meta name="description" content="Umut İnce — Yönetim Bilişim Sistemleri öğrencisi, E-Ticaret stratejisti ve sporcu. Dijital dünyada iz bırakıyorum." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress"></div>
+
+  <!-- Offline Banner -->
+  <div id="offline-banner">📡 İnternet bağlantısı yok — Çevrimdışı moddasınız</div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:9700;"></canvas>
+
+  <!-- ══════════════ NAVBAR ══════════════ -->
+  <nav id="navbar">
+    <div class="nav-logo">apex<span>.</span>os</div>
+
+    <ul class="nav-links">
+      <li><a href="#about">Hakkımda</a></li>
+      <li><a href="#skills">Yetenekler</a></li>
+      <li><a href="#projects">Projeler</a></li>
+      <li><a href="#testimonials">Referanslar</a></li>
+      <li><a href="#contact">İletişim</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <button class="nav-btn" id="theme-toggle" title="Tema Değiştir">☀️</button>
+      <button class="nav-btn" onclick="document.getElementById('cmd-overlay').classList.add('active'); document.getElementById('cmd-input').focus();" title="Komut Paleti (Ctrl+K)" style="font-size:0.75rem;font-family:'Fira Code',monospace;border:1px solid rgba(255,255,255,0.1);padding:5px 10px;border-radius:6px;gap:6px;">
+        <span>⌘K</span>
+      </button>
+      <button class="darknet-btn-nav" onclick="window.location.href='dark.html'">◈ DARKNET</button>
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu">
+    <a href="#about">Hakkımda</a>
+    <a href="#skills">Yetenekler</a>
+    <a href="#projects">Projeler</a>
+    <a href="#contact">İletişim</a>
+    <a href="dark.html" style="color:var(--pink)">◈ Darknet</a>
+  </div>
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          umutince.online — V18 Mega Pack
+        </div>
+
+        <h1 class="hero-name">Umut İnce</h1>
+
+        <div class="hero-rotating" id="hero-rotating">> E-Ticaret Stratejisti</div>
+
+        <p class="hero-desc">
+          Yönetim Bilişim Sistemleri öğrencisi, dijital strateji tutkunu ve aynı zamanda
+          disiplinini hayatın her alanına yansıtan bir sporcu. Teknoloji ve iş dünyasını
+          harmanlayarak değer üretiyorum.
+        </p>
+
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+            💬 İletişime Geç
+          </button>
+          <button class="btn-outline" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+            🚀 Projelerimi Gör
+          </button>
+          <button class="btn-darknet" onclick="window.location.href='dark.html'">
+            ◈ DARKNET →
+          </button>
+        </div>
+
+        <div class="hero-stats" id="hero-stats">
+          <div class="stat">
+            <div class="stat-num" data-count="3" data-suffix="+">0+</div>
+            <div class="stat-label">Yıl Deneyim</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-count="12" data-suffix="+">0+</div>
+            <div class="stat-label">Tamamlanan Proje</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-count="5" data-suffix="+">0+</div>
+            <div class="stat-label">Spor Dalı</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-image-wrap">
+        <div class="hero-img-container">
+          <div class="hero-img-glow"></div>
+          <img src="images/profile.jpg" alt="Umut İnce" class="hero-img" id="hero-profile-img" title="Fotoğrafı büyütmek için tıkla" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px;width:100%;">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg2)" />
+    </svg>
+  </div>
+
+  <!-- ══════════════ HAKKIMDA (BENTO GRID) ══════════════ -->
+  <section id="about" style="background:var(--bg2);padding:80px 5%;">
+    <div class="section-header fade-up">
+      <div class="section-tag">// hakkımda</div>
+      <h2 class="section-title">Beni Tanı</h2>
+      <p class="section-desc">Dijital dünyada strateji kuran, sporda disiplin kazanan bir YBS öğrencisi.</p>
+    </div>
+
+    <div class="bento-grid">
+      <!-- Büyük kart: Profil -->
+      <div class="bento-card large fade-up" style="background:linear-gradient(135deg, rgba(34,211,238,0.07), rgba(167,139,250,0.07));">
+        <div class="bento-label">// profil</div>
+        <div class="bento-title" style="font-size:1.4rem;">Merhaba, Ben Umut 👋</div>
+        <div class="bento-text">
+          Yönetim Bilişim Sistemleri alanında eğitim alırken, e-ticaret stratejisi ve dijital dönüşüm üzerine de kendimi sürekli geliştiriyorum. Teknolojinin iş dünyasıyla kesiştiği noktada çözümler üretiyorum.
+        </div>
+        <div style="margin-top:1rem;">
+          <span class="bento-tag">YBS</span>
+          <span class="bento-tag">E-Ticaret</span>
+          <span class="bento-tag">Dijital Strateji</span>
+          <span class="bento-tag">Analitik</span>
+        </div>
+      </div>
+
+      <!-- Spor -->
+      <div class="bento-card fade-up" style="background:linear-gradient(135deg, rgba(244,114,182,0.06), rgba(124,58,237,0.06));">
+        <div class="bento-icon">🥊</div>
+        <div class="bento-label">// spor & disiplin</div>
+        <div class="bento-title">Muay Thai</div>
+        <div class="bento-text">Savaş sanatlarındaki disiplin, iş hayatımda stratejik düşünme becerisini doğrudan güçlendiriyor.</div>
+      </div>
+
+      <!-- E-Ticaret -->
+      <div class="bento-card fade-up" style="background:linear-gradient(135deg, rgba(52,211,153,0.06), rgba(34,211,238,0.06));">
+        <div class="bento-icon">📈</div>
+        <div class="bento-label">// uzmanlık</div>
+        <div class="bento-title">E-Ticaret 2026</div>
+        <div class="bento-text">Türkiye e-ticaret büyüme modellerini analiz ederek dijital pazarda ölçeklenebilir stratejiler geliştiriyorum.</div>
+      </div>
+
+      <!-- Okçuluk -->
+      <div class="bento-card fade-up">
+        <div class="bento-icon">🏹</div>
+        <div class="bento-label">// odak</div>
+        <div class="bento-title">Okçuluk</div>
+        <div class="bento-text">Okçuluk bana odak, sabır ve hedef odaklı düşünmeyi öğretti — her projede bu becerileri kullanıyorum.</div>
+      </div>
+
+      <!-- Github / Kod -->
+      <div class="bento-card fade-up" style="font-family:'Fira Code',monospace;">
+        <div class="bento-icon">💻</div>
+        <div class="bento-label">// kod & teknoloji</div>
+        <div class="bento-title">Dev Stack</div>
+        <div style="margin-top:0.5rem;">
+          <span class="bento-tag">JavaScript</span>
+          <span class="bento-tag">Python</span>
+          <span class="bento-tag">React</span>
+          <span class="bento-tag">Firebase</span>
+          <span class="bento-tag">SQL</span>
+        </div>
+      </div>
+
+      <!-- Hedefler -->
+      <div class="bento-card fade-up" style="background:linear-gradient(135deg, rgba(251,191,36,0.06), rgba(244,114,182,0.04));">
+        <div class="bento-icon">🎯</div>
+        <div class="bento-label">// vizyon</div>
+        <div class="bento-title">2026 Hedefleri</div>
+        <div class="bento-text">Kendi e-ticaret markasını kurmak, uluslararası pazara açılmak ve teknoloji girişimcisi olmak.</div>
+      </div>
+
+      <!-- Konum / Hakkında küçük -->
+      <div class="bento-card fade-up" style="display:flex;align-items:center;gap:1rem;">
+        <div style="font-size:2.5rem;">📍</div>
+        <div>
+          <div class="bento-label">// konum</div>
+          <div class="bento-title">Türkiye</div>
+          <div class="bento-text" style="font-size:0.8rem;">Remote-first 🌍</div>
+        </div>
+      </div>
+
+      <!-- İletişim CTA wide -->
+      <div class="bento-card wide fade-up" style="background:linear-gradient(135deg, rgba(34,211,238,0.06), rgba(167,139,250,0.06));display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div class="bento-label">// seninle çalışalım</div>
+          <div class="bento-title" style="font-size:1.3rem;">Yeni bir proje mi? Birlikte büyüyelim.</div>
+          <div class="bento-text">Fikir aşamasından lansmana kadar dijital yolculuğunuzda yanınızdayım.</div>
+        </div>
+        <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          Hemen Konuşalım →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px;width:100%;">
+      <path d="M0,30 C360,0 1080,60 1440,30 L1440,60 L0,60 Z" fill="var(--bg)" />
+    </svg>
+  </div>
+
+  <!-- ══════════════ YETENEKler ══════════════ -->
+  <section id="skills" style="background:var(--bg);padding:80px 5%;">
+    <div class="section-header fade-up">
+      <div class="section-tag">// yetenekler</div>
+      <h2 class="section-title">Yetkinliklerim</h2>
+      <p class="section-desc">Teknik beceriler ve sürekli öğrenme tutkusuyla geliştirilen yetkinlikler.</p>
+    </div>
+
+    <div class="skills-wrap">
+      <div class="skill-item fade-up">
+        <div class="skill-header">
+          <span class="skill-name">⚡ JavaScript / TypeScript</span>
+          <span class="skill-pct">88%</span>
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar-fill" data-pct="88"></div>
+        </div>
+      </div>
+      <div class="skill-item fade-up">
+        <div class="skill-header">
+          <span class="skill-name">🐍 Python & Veri Analizi</span>
+          <span class="skill-pct">82%</span>
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar-fill" data-pct="82"></div>
+        </div>
+      </div>
+      <div class="skill-item fade-up">
+        <div class="skill-header">
+          <span class="skill-name">📊 E-Ticaret & Dijital Pazarlama</span>
+          <span class="skill-pct">91%</span>
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar-fill" data-pct="91" style="background:linear-gradient(90deg, var(--purple), var(--pink));"></div>
+        </div>
+      </div>
+      <div class="skill-item fade-up">
+        <div class="skill-header">
+          <span class="skill-name">🗄️ SQL & Veri Tabanı Yönetimi</span>
+          <span class="skill-pct">75%</span>
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar-fill" data-pct="75"></div>
+        </div>
+      </div>
+      <div class="skill-item fade-up">
+        <div class="skill-header">
+          <span class="skill-name">🎨 UI/UX & Web Tasarım</span>
+          <span class="skill-pct">85%</span>
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar-fill" data-pct="85" style="background:linear-gradient(90deg, var(--green), var(--cyan2));"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px;width:100%;">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg2)" />
+    </svg>
+  </div>
+
+  <!-- ══════════════ PROJEler ══════════════ -->
+  <section id="projects" style="background:var(--bg2);padding:80px 5%;">
+    <div class="section-header fade-up">
+      <div class="section-tag">// projeler</div>
+      <h2 class="section-title">Öne Çıkan Projelerim</h2>
+      <p class="section-desc">Gerçek dünya problemlerine ürettiğim dijital çözümler.</p>
+    </div>
+
+    <div class="projects-grid">
+      <!-- Proje 1 -->
+      <div class="project-card fade-up">
+        <div class="project-thumb" style="background:linear-gradient(135deg, #0f4c75, #1b6ca8);">
+          🛒
+        </div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="project-tag">E-Ticaret</span>
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+          </div>
+          <div class="project-title">Apex Shop — Akıllı Alışveriş Platformu</div>
+          <div class="project-desc">AI destekli ürün önerileri ve gerçek zamanlı stok yönetimiyle modern e-ticaret deneyimi.</div>
+          <div class="project-links">
+            <a class="project-link" href="#" onclick="showToast('info','🚀 Demo','Yakında yayında!');return false;">🔗 Demo</a>
+            <a class="project-link" href="https://github.com" target="_blank">📁 Kod</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proje 2 -->
+      <div class="project-card fade-up">
+        <div class="project-thumb" style="background:linear-gradient(135deg, #1a0a3d, #3d0a6e);">
+          📊
+        </div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Data Science</span>
+            <span class="project-tag">ML</span>
+          </div>
+          <div class="project-title">Pazar Analiz Motoru — YBS Projesi</div>
+          <div class="project-desc">Türkiye e-ticaret verilerini analiz eden, fiyatlandırma stratejileri öneren ML modeli.</div>
+          <div class="project-links">
+            <a class="project-link" href="#" onclick="showToast('info','📊 Rapor','Proje raporu hazırlanıyor...');return false;">📄 Rapor</a>
+            <a class="project-link" href="https://github.com" target="_blank">📁 Kod</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proje 3 -->
+      <div class="project-card fade-up">
+        <div class="project-thumb" style="background:linear-gradient(135deg, #0a3d2c, #0d6e50);">
+          🤖
+        </div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="project-tag">AI</span>
+            <span class="project-tag">Gemini API</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+          <div class="project-title">Umut.AI — Kişisel Asistan</div>
+          <div class="project-desc">Google Gemini API entegrasyonlu, stratejik karar vermeye yardımcı kişisel AI asistanı.</div>
+          <div class="project-links">
+            <a class="project-link" href="#" onclick="showToast('info','🤖 AI','Demo aktif!');return false;">🔗 Demo</a>
+            <a class="project-link" href="https://github.com" target="_blank">📁 Kod</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proje 4 -->
+      <div class="project-card fade-up">
+        <div class="project-thumb" style="background:linear-gradient(135deg, #3d1a0a, #6e3a0d);">
+          🌐
+        </div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="project-tag">Portfolio</span>
+            <span class="project-tag">HTML/CSS/JS</span>
+            <span class="project-tag">V18</span>
+          </div>
+          <div class="project-title">Apex OS — Bu Site!</div>
+          <div class="project-desc">50+ özellikle dolu kişisel portfolyo ve dijital işletim sistemi. Darknet modülü dahil.</div>
+          <div class="project-links">
+            <a class="project-link" href="#" onclick="showToast('success','✅ Zaten Buradasın!','Bu siteyi ziyaret ediyorsun.');return false;">🔗 Demo</a>
+            <a class="project-link" href="dark.html">◈ Darknet</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px;width:100%;">
+      <path d="M0,30 C360,0 1080,60 1440,30 L1440,60 L0,60 Z" fill="var(--bg)" />
+    </svg>
+  </div>
+
+  <!-- ══════════════ TESTİMONİALS ══════════════ -->
+  <section id="testimonials" style="background:var(--bg);padding:80px 0;overflow:hidden;">
+    <div class="section-header fade-up" style="padding:0 5%;">
+      <div class="section-tag">// referanslar</div>
+      <h2 class="section-title">Neler Dediler?</h2>
+    </div>
+
+    <div class="testimonials-track-wrap" style="margin-top:2rem;">
+      <div class="testimonials-track" id="testi-track">
+        <!-- Tekrar için her kart 2 kez -->
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Umut'un dijital strateji anlayışı işletmemizi tamamen dönüştürdü. E-ticaret ciromuzu 3 ayda %40 artırdık."</div><div class="testi-author"><div class="testi-avatar">🏪</div><div><div class="testi-name">Ahmet Yılmaz</div><div class="testi-role">Girişimci</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"YBS konusundaki bilgisi ve analitik bakış açısı ile projemizi zamanında teslim ettik. Tekrar çalışmak isterim."</div><div class="testi-author"><div class="testi-avatar">💼</div><div><div class="testi-name">Dr. Elif Kaya</div><div class="testi-role">Akademisyen</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Kod kalitesi ve problem çözme hızı inanılmaz. Startup projemiz için bulduğumuz en iyi iş birlikçi."</div><div class="testi-author"><div class="testi-avatar">🚀</div><div><div class="testi-name">Can Demir</div><div class="testi-role">Startup Kurucusu</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Muay Thai'daki disiplini işine de yansıtıyor — son derece güvenilir ve sonuç odaklı bir ekip üyesi."</div><div class="testi-author"><div class="testi-avatar">🥊</div><div><div class="testi-name">Mert Aslan</div><div class="testi-role">Antrenör</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Veri analizindeki derinliği ve Python becerileri projeyi kritik aşamada kurtardı. Kesinlikle tavsiye ederim."</div><div class="testi-author"><div class="testi-avatar">📊</div><div><div class="testi-name">Selin Öz</div><div class="testi-role">Veri Analisti</div></div></div></div>
+        <!-- Döngü için tekrar -->
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Umut'un dijital strateji anlayışı işletmemizi tamamen dönüştürdü. E-ticaret ciromuzu 3 ayda %40 artırdık."</div><div class="testi-author"><div class="testi-avatar">🏪</div><div><div class="testi-name">Ahmet Yılmaz</div><div class="testi-role">Girişimci</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"YBS konusundaki bilgisi ve analitik bakış açısı ile projemizi zamanında teslim ettik. Tekrar çalışmak isterim."</div><div class="testi-author"><div class="testi-avatar">💼</div><div><div class="testi-name">Dr. Elif Kaya</div><div class="testi-role">Akademisyen</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Kod kalitesi ve problem çözme hızı inanılmaz. Startup projemiz için bulduğumuz en iyi iş birlikçi."</div><div class="testi-author"><div class="testi-avatar">🚀</div><div><div class="testi-name">Can Demir</div><div class="testi-role">Startup Kurucusu</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Muay Thai'daki disiplini işine de yansıtıyor — son derece güvenilir ve sonuç odaklı bir ekip üyesi."</div><div class="testi-author"><div class="testi-avatar">🥊</div><div><div class="testi-name">Mert Aslan</div><div class="testi-role">Antrenör</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Veri analizindeki derinliği ve Python becerileri projeyi kritik aşamada kurtardı. Kesinlikle tavsiye ederim."</div><div class="testi-author"><div class="testi-avatar">📊</div><div><div class="testi-name">Selin Öz</div><div class="testi-role">Veri Analisti</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px;width:100%;">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg2)" />
+    </svg>
+  </div>
+
+  <!-- ══════════════ SSS (FAQ) ══════════════ -->
+  <section style="background:var(--bg2);padding:80px 5%;">
+    <div class="section-header fade-up">
+      <div class="section-tag">// sss</div>
+      <h2 class="section-title">Sık Sorulan Sorular</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item fade-up">
+        <div class="faq-question">Hangi alanlarda hizmet veriyorsun? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><p>E-ticaret stratejisi, web geliştirme, veri analizi, YBS danışmanlığı ve dijital pazarlama konularında hizmet veriyorum. Her proje kendi özelinde ele alınır.</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <div class="faq-question">Freelance proje kabul ediyor musun? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><p>Evet! Uygun projeler için freelance çalışmaya açığım. İletişim formunu doldurman veya doğrudan mesaj atman yeterli.</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <div class="faq-question">Proje süreci nasıl işliyor? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><p>İlk toplantı → Analiz & Planlama → Geliştirme → Test → Teslimat & Destek. Her aşamada şeffaf iletişim ve düzenli güncellemeler sağlıyorum.</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <div class="faq-question">Teknik altyapın nedir? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><p>JavaScript, Python, React, Firebase, SQL ve çeşitli cloud platformlarında (Vercel, Netlify) deneyimim var. YBS geçmişim sayesinde teknik ve iş süreçlerini birlikte yönetebiliyorum.</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <div class="faq-question">Darknet modülü nedir? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><p>Darknet, sitenin gizli bölümüdür. Özel araçlar, mini oyunlar ve ileri seviye özellikler barındırır. Üst menüdeki "◈ DARKNET" butonuna basarak veya klavyede "D" tuşuna basarak erişebilirsin.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px;width:100%;">
+      <path d="M0,30 C360,0 1080,60 1440,30 L1440,60 L0,60 Z" fill="var(--bg)" />
+    </svg>
+  </div>
+
+  <!-- ══════════════ İLETİŞİM ══════════════ -->
+  <section id="contact" style="background:var(--bg);padding:80px 5%;">
+    <div class="section-header fade-up">
+      <div class="section-tag">// iletişim</div>
+      <h2 class="section-title">Birlikte Çalışalım</h2>
+      <p class="section-desc">Yeni bir proje, iş birliği veya sadece merhaba demek için ulaşmanı bekliyorum.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info fade-up">
+        <h3>Seninle tanışmaya hazırım.</h3>
+        <p>Her büyük proje küçük bir konuşmayla başlar. E-posta veya form üzerinden ulaşabilirsin.</p>
+        <div class="contact-links">
+          <div class="contact-link"><a href="mailto:umut@umutince.online"><span class="contact-link-icon">📧</span> umut@umutince.online</a></div>
+          <div class="contact-link"><a href="https://linkedin.com" target="_blank"><span class="contact-link-icon">💼</span> LinkedIn Profili</a></div>
+          <div class="contact-link"><a href="https://github.com" target="_blank"><span class="contact-link-icon">🐙</span> GitHub Profili</a></div>
+          <div class="contact-link"><a href="dark.html"><span class="contact-link-icon">◈</span> Darknet Modülü</a></div>
+        </div>
+      </div>
+
+      <form class="contact-form fade-up" id="contact-form">
+        <div class="form-group">
+          <label for="cf-name">Adınız</label>
+          <input type="text" id="cf-name" placeholder="Adınız ve soyadınız" required />
+        </div>
+        <div class="form-group">
+          <label for="cf-email">E-posta</label>
+          <input type="email" id="cf-email" placeholder="ornek@mail.com" required />
+        </div>
+        <div class="form-group">
+          <label for="cf-subject">Konu</label>
+          <input type="text" id="cf-subject" placeholder="Proje, iş teklifi, soru..." />
+        </div>
+        <div class="form-group">
+          <label for="cf-msg">Mesajınız</label>
+          <textarea id="cf-msg" placeholder="Merhaba Umut, seninle..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;padding:15px;">📬 Mesaj Gönder</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer id="footer">
+    <div class="footer-left">
+      apex<span>.os</span> / umutince.online
+    </div>
+    <div class="footer-center">
+      <span>👁</span>
+      <span id="live-counter" style="color:var(--green);">7</span>
+      <span>kişi şu an burada</span>
+    </div>
+    <div class="footer-right">
+      <a href="#" class="footer-link">Gizlilik</a>
+      <a href="dark.html" class="footer-link" style="color:var(--purple);">◈ Darknet</a>
+      <a href="admin.html" class="footer-link" id="admin-link" style="color:var(--text3);">⚙</a>
+    </div>
+  </footer>
+
+  <!-- ══════════════ OVERLAYS & WIDGETS ══════════════ -->
+
+  <!-- Back to Top -->
+  <button id="back-to-top" title="Yukarı Çık">↑</button>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Badge Container -->
+  <div id="badge-container"></div>
+
+  <!-- Cookie Bar -->
+  <div id="cookie-bar">
+    <p>🍪 Deneyiminizi iyileştirmek için çerezler kullanıyoruz. <a href="#">Gizlilik Politikası</a></p>
+    <div class="cookie-btns">
+      <button class="btn-cookie-deny" id="cookie-deny">Reddet</button>
+      <button class="btn-cookie-accept" id="cookie-accept">Kabul Et ✓</button>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button id="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt="Profil fotoğrafı" />
+  </div>
+
+  <!-- Command Palette -->
+  <div id="cmd-overlay">
+    <div id="cmd-box">
+      <div id="cmd-search">
+        <span id="cmd-search-icon">🔍</span>
+        <input type="text" id="cmd-input" placeholder="Komut ara veya bir yere git..." autocomplete="off" />
+      </div>
+      <div id="cmd-results"></div>
+      <div id="cmd-footer">
+        <span><span class="cmd-key">↵</span> Seç</span>
+        <span><span class="cmd-key">Esc</span> Kapat</span>
+        <span><span class="cmd-key">Ctrl K</span> Aç/Kapat</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline Banner -->
+  <script src="script.js"></script>
+</body>
+</html>

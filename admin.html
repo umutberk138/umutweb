@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚙ Admin Panel // Apex OS V18</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #07070f;
+      --bg2: #0d0d1c;
+      --bg3: #111127;
+      --cyan: #22d3ee;
+      --cyan2: #06b6d4;
+      --purple: #a78bfa;
+      --purple2: #7c3aed;
+      --pink: #f472b6;
+      --green: #34d399;
+      --red: #f87171;
+      --yellow: #fbbf24;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #475569;
+      --border: rgba(34,211,238,0.12);
+      --radius: 10px;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    #admin-header {
+      background: rgba(13,13,28,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-logo {
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    .admin-logo span { color: var(--pink); }
+    .admin-header-right { display: flex; align-items: center; gap: 1rem; font-size: 0.8rem; }
+    .admin-status {
+      background: rgba(52,211,153,0.1);
+      border: 1px solid rgba(52,211,153,0.2);
+      color: var(--green);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+    }
+    .back-a {
+      background: rgba(34,211,238,0.06);
+      border: 1px solid var(--border);
+      color: var(--cyan);
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+    .back-a:hover { background: rgba(34,211,238,0.12); }
+
+    /* Layout */
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* Sidebar */
+    #admin-sidebar {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+    }
+    .sidebar-section {
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-section-label {
+      font-size: 0.65rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 0 1.25rem;
+      margin-bottom: 0.5rem;
+      font-family: 'Fira Code', monospace;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 2px solid transparent;
+    }
+    .sidebar-link:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+    .sidebar-link.active { color: var(--cyan); border-left-color: var(--cyan); background: rgba(34,211,238,0.05); }
+    .sidebar-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+    /* Content */
+    #admin-content { padding: 2rem; overflow-y: auto; }
+    .admin-page { display: none; }
+    .admin-page.active { display: block; }
+
+    /* Cards */
+    .admin-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      color: var(--cyan);
+      font-family: 'Fira Code', monospace;
+    }
+    .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    .stat-card-lbl { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-family: 'Fira Code', monospace; }
+    .stat-card-val { font-size: 1.8rem; font-weight: 900; font-family: 'Fira Code', monospace; }
+    .stat-card-sub { font-size: 0.75rem; color: var(--text3); margin-top: 4px; }
+
+    /* Table */
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .admin-table th {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.7rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-family: 'Fira Code', monospace;
+    }
+    .admin-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      color: var(--text2);
+    }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.01); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-family: 'Fira Code', monospace; }
+    .badge.ok { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+    .badge.warn { background: rgba(251,191,36,0.15); color: var(--yellow); border: 1px solid rgba(251,191,36,0.2); }
+    .badge.danger { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+    /* Settings */
+    .settings-group { margin-bottom: 2rem; }
+    .settings-group-label { font-size: 0.75rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'Fira Code', monospace; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .setting-info h4 { font-size: 0.875rem; font-weight: 600; margin-bottom: 2px; }
+    .setting-info p { font-size: 0.75rem; color: var(--text3); }
+    .toggle {
+      position: relative;
+      width: 44px; height: 24px;
+      cursor: pointer;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      transition: 0.3s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--text3);
+      left: 2px; top: 2px;
+      transition: 0.3s;
+    }
+    .toggle input:checked + .toggle-slider { background: rgba(34,211,238,0.2); border-color: var(--cyan2); }
+    .toggle input:checked + .toggle-slider::before { background: var(--cyan); transform: translateX(20px); }
+
+    /* Activity Log */
+    .log-entry {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.8rem;
+    }
+    .log-time { font-family: 'Fira Code', monospace; color: var(--text3); font-size: 0.7rem; flex-shrink: 0; min-width: 100px; }
+    .log-msg { color: var(--text2); }
+    .log-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+
+    /* Buttons */
+    .btn-sm {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-cyan { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.2); }
+    .btn-cyan:hover { background: rgba(34,211,238,0.25); }
+    .btn-red { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+    .btn-red:hover { background: rgba(248,113,113,0.25); }
+    .btn-green { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+
+    /* Charts (CSS) */
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding-bottom: 0.5rem; }
+    .bar-item { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .bar-fill { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--cyan), var(--purple)); transition: height 1s ease; }
+    .bar-label { font-size: 0.6rem; color: var(--text3); font-family: 'Fira Code', monospace; }
+
+    @media (max-width:768px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      #admin-sidebar { display: flex; flex-wrap: wrap; gap: 0; border-right: none; border-bottom: 1px solid var(--border); padding: 0.5rem; }
+      .sidebar-link { font-size: 0.75rem; padding: 0.5rem 0.75rem; }
+      .sidebar-section-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="admin-header">
+  <div class="admin-logo">⚙ admin<span>.apex</span></div>
+  <div class="admin-header-right">
+    <span class="admin-status">● SİSTEM AKTIF</span>
+    <a href="dark.html" class="back-a">← Darknet</a>
+    <a href="index.html" class="back-a">🏠 Ana Sayfa</a>
+  </div>
+</div>
+
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <div id="admin-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">// Genel</div>
+      <div class="sidebar-link active" onclick="showPage('dashboard')">
+        <span class="sidebar-icon">📊</span> Dashboard
+      </div>
+      <div class="sidebar-link" onclick="showPage('visitors')">
+        <span class="sidebar-icon">👥</span> Ziyaretçiler
+      </div>
+      <div class="sidebar-link" onclick="showPage('activity')">
+        <span class="sidebar-icon">📋</span> Aktivite Logu
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">// Sistem</div>
+      <div class="sidebar-link" onclick="showPage('settings')">
+        <span class="sidebar-icon">⚙️</span> Ayarlar
+      </div>
+      <div class="sidebar-link" onclick="showPage('modules')">
+        <span class="sidebar-icon">🧩</span> Modüller
+      </div>
+      <div class="sidebar-link" onclick="showPage('tools')">
+        <span class="sidebar-icon">🔧</span> Araçlar
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">// Bağlantılar</div>
+      <div class="sidebar-link" onclick="window.location.href='dark.html'">
+        <span class="sidebar-icon">◈</span> Darknet
+      </div>
+      <div class="sidebar-link" onclick="window.location.href='index.html'">
+        <span class="sidebar-icon">🏠</span> Portfolio
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div id="admin-content">
+
+    <!-- DASHBOARD -->
+    <div class="admin-page active" id="page-dashboard">
+      <div class="admin-title">// Dashboard</div>
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-lbl">Aktif Ziyaretçi</div>
+          <div class="stat-card-val" id="a-visitors" style="color:var(--green);">7</div>
+          <div class="stat-card-sub">Gerçek zamanlı</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-lbl">Toplam Sayfa Görüntüleme</div>
+          <div class="stat-card-val" id="a-views" style="color:var(--cyan);">1,247</div>
+          <div class="stat-card-sub">Bu ay</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-lbl">Ort. Oturum Süresi</div>
+          <div class="stat-card-val" style="color:var(--purple);">3:42</div>
+          <div class="stat-card-sub">Dakika</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-lbl">Sistem Durumu</div>
+          <div class="stat-card-val" style="color:var(--green);font-size:1.2rem;">ONLINE</div>
+          <div class="stat-card-sub">V18 Mega Pack</div>
+        </div>
+      </div>
+
+      <!-- Mini Chart -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="font-size:0.8rem;color:var(--text2);margin-bottom:1rem;font-weight:600;">Haftalık Ziyaretçi Grafiği</div>
+        <div class="bar-chart" id="visit-chart">
+          <!-- JS ile doldurulacak -->
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:0.5rem;">
+          <span style="font-size:0.65rem;color:var(--text3);">Pzt</span>
+          <span style="font-size:0.65rem;color:var(--text3);">Sal</span>
+          <span style="font-size:0.65rem;color:var(--text3);">Çar</span>
+          <span style="font-size:0.65rem;color:var(--text3);">Per</span>
+          <span style="font-size:0.65rem;color:var(--text3);">Cum</span>
+          <span style="font-size:0.65rem;color:var(--text3);">Cmt</span>
+          <span style="font-size:0.65rem;color:var(--text3);">Paz</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+        <div style="font-size:0.8rem;color:var(--text2);margin-bottom:1rem;font-weight:600;">Hızlı Eylemler</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+          <button class="btn-sm btn-cyan" onclick="showPage('settings')">⚙️ Ayarlar</button>
+          <button class="btn-sm btn-cyan" onclick="clearSiteCache()">🗑️ Önbellek Temizle</button>
+          <button class="btn-sm btn-green" onclick="window.location.href='index.html'">🔗 Siteyi Görüntüle</button>
+          <button class="btn-sm btn-red" onclick="confirmReset()">⚠️ Ayarları Sıfırla</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISITORS -->
+    <div class="admin-page" id="page-visitors">
+      <div class="admin-title">// Ziyaretçi İstatistikleri</div>
+
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-card-lbl">Bu Hafta</div><div class="stat-card-val" style="color:var(--cyan);">318</div></div>
+        <div class="stat-card"><div class="stat-card-lbl">Bu Ay</div><div class="stat-card-val" style="color:var(--purple);">1,247</div></div>
+        <div class="stat-card"><div class="stat-card-lbl">Toplam</div><div class="stat-card-val" style="color:var(--green);">5,891</div></div>
+        <div class="stat-card"><div class="stat-card-lbl">Hemen Çıkma</div><div class="stat-card-val" style="color:var(--yellow);">38%</div></div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>IP Adresi</th>
+              <th>Konum</th>
+              <th>Tarayıcı</th>
+              <th>Süre</th>
+              <th>Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>192.168.1.***</td><td>🇹🇷 İstanbul, TR</td><td>Chrome 120</td><td>5:32</td><td><span class="badge ok">Online</span></td></tr>
+            <tr><td>10.0.0.***</td><td>🇹🇷 Ankara, TR</td><td>Firefox 121</td><td>2:18</td><td><span class="badge ok">Online</span></td></tr>
+            <tr><td>172.16.0.***</td><td>🇩🇪 Berlin, DE</td><td>Chrome 119</td><td>0:45</td><td><span class="badge warn">Pasif</span></td></tr>
+            <tr><td>203.0.113.***</td><td>🇺🇸 New York, US</td><td>Safari 17</td><td>8:01</td><td><span class="badge ok">Online</span></td></tr>
+            <tr><td>198.51.100.***</td><td>🇬🇧 London, UK</td><td>Edge 120</td><td>1:12</td><td><span class="badge danger">Çıktı</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="admin-page" id="page-activity">
+      <div class="admin-title">// Aktivite Logu</div>
+      <div id="activity-log">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="admin-page" id="page-settings">
+      <div class="admin-title">// Site Ayarları</div>
+
+      <div class="settings-group">
+        <div class="settings-group-label">// Görünüm</div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Karanlık Mod Varsayılanı</h4><p>Site açılışında aktif olan tema</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-dark"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>İmleç İzi Efekti</h4><p>Fare arkasında ışıklı iz efekti</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-cursor"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Scroll İlerleme Çubuğu</h4><p>Sayfanın üstündeki gradient çubuk</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-scroll"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Animasyonlar</h4><p>Tüm CSS animasyonlarını etkinleştir</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-anim"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-label">// Sistem</div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Çerez Onayı Göster</h4><p>İlk ziyarette çerez onay çubuğu</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-cookie"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Canlı Ziyaretçi Sayacı</h4><p>Footer'da kaç kişinin baktığını göster</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-counter"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Darknet Butonu (Hero)</h4><p>Ana sayfada Darknet butonunu göster</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-darkbtn"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info"><h4>Rozet Sistemi</h4><p>Ziyaretçilere rozet kazandır</p></div>
+          <label class="toggle"><input type="checkbox" checked id="s-badges"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <button class="btn-sm btn-green" style="padding:10px 24px;font-size:0.85rem;" onclick="saveSettings()">💾 Ayarları Kaydet</button>
+    </div>
+
+    <!-- MODULES -->
+    <div class="admin-page" id="page-modules">
+      <div class="admin-title">// Aktif Modüller — V18 Mega Pack</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">🌙 Dark/Light Mode</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">Tema geçiş sistemi ve localStorage kaydı</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">⌨️ Command Palette</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">Ctrl+K ile komutu açılır panel</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">🏆 Rozet Sistemi</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">5 rozet + konfeti animasyonu</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">◈ Darknet Modülü</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">Terminal + Oyunlar + Chat</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">📊 Bento Grid</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">Apple tarzı 8 kartlı bilgi bölümü</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">⚡ Skill Bars</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">Scroll'da animasyonlu yetenek çubukları</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">🍪 Cookie Consent</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">GDPR uyumlu çerez bildirimi</p>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-weight:700;font-size:0.85rem;">📡 Online Detector</span>
+            <span class="badge ok">Aktif</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);">Bağlantı durumu bildirim sistemi</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="admin-page" id="page-tools">
+      <div class="admin-title">// Admin Araçları</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+          <h3 style="font-size:0.9rem;font-weight:700;margin-bottom:0.5rem;color:var(--cyan);">🧹 localStorage Temizle</h3>
+          <p style="font-size:0.75rem;color:var(--text3);margin-bottom:1rem;">Tüm yerel depolama verilerini sıfırlar (rozetler, çerez kararı, tema).</p>
+          <button class="btn-sm btn-red" onclick="clearLS()">Temizle</button>
+        </div>
+
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+          <h3 style="font-size:0.9rem;font-weight:700;margin-bottom:0.5rem;color:var(--cyan);">📋 Sistem Bilgisi</h3>
+          <div id="sys-info" style="font-size:0.75rem;color:var(--text2);font-family:'Fira Code',monospace;line-height:2;"></div>
+        </div>
+
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+          <h3 style="font-size:0.9rem;font-weight:700;margin-bottom:0.5rem;color:var(--cyan);">🔗 Hızlı Bağlantılar</h3>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem;">
+            <a href="index.html" style="font-size:0.8rem;color:var(--text2);display:flex;align-items:center;gap:0.5rem;transition:color 0.3s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--text2)'">🏠 Ana Sayfa</a>
+            <a href="dark.html" style="font-size:0.8rem;color:var(--text2);display:flex;align-items:center;gap:0.5rem;transition:color 0.3s;" onmouseover="this.style.color='var(--pink)'" onmouseout="this.style.color='var(--text2)'">◈ Darknet</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Page Navigation ──
+function showPage(id) {
+  document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const links = document.querySelectorAll('.sidebar-link');
+  const pages = ['dashboard','visitors','activity','settings','modules','tools'];
+  const idx = pages.indexOf(id);
+  if (idx >= 0) links[idx].classList.add('active');
+}
+
+// ── Bar Chart ──
+const chartData = [42,78,55,91,63,88,71];
+const chart = document.getElementById('visit-chart');
+const max = Math.max(...chartData);
+chartData.forEach(v => {
+  const h = Math.round((v/max) * 100);
+  const item = document.createElement('div');
+  item.className = 'bar-item';
+  item.innerHTML = `<div class="bar-fill" style="height:${h}px;"></div><div class="bar-label">${v}</div>`;
+  chart.appendChild(item);
+});
+
+// ── Live Stats ──
+setInterval(() => {
+  const curr = parseInt(document.getElementById('a-visitors').textContent) || 7;
+  const delta = (Math.random() > 0.5 ? 1 : -1);
+  const next = Math.max(3, Math.min(20, curr + delta));
+  document.getElementById('a-visitors').textContent = next;
+}, 4000);
+
+// ── Activity Log ──
+const logEntries = [
+  { time: '21:47:02', msg: 'Yeni ziyaretçi bağlandı — 192.168.1.x', color: 'var(--green)' },
+  { time: '21:45:18', msg: 'Darknet erişimi — umut:2026', color: 'var(--cyan)' },
+  { time: '21:44:03', msg: 'Admin paneli açıldı', color: 'var(--purple)' },
+  { time: '21:42:55', msg: 'Tema değiştirildi: dark → light', color: 'var(--yellow)' },
+  { time: '21:41:33', msg: 'Rozet kazanıldı: İlk Ziyaretçi', color: 'var(--yellow)' },
+  { time: '21:40:12', msg: 'İletişim formu gönderildi', color: 'var(--green)' },
+  { time: '21:38:45', msg: 'Command palette açıldı (Ctrl+K)', color: 'var(--cyan)' },
+  { time: '21:35:20', msg: 'Ziyaretçi çıkış yaptı — 10.0.0.x', color: 'var(--red)' },
+];
+const logContainer = document.getElementById('activity-log');
+logEntries.forEach(e => {
+  const el = document.createElement('div');
+  el.className = 'log-entry';
+  el.innerHTML = `<div class="log-dot" style="background:${e.color}"></div><div class="log-time">${e.time}</div><div class="log-msg">${e.msg}</div>`;
+  logContainer.appendChild(el);
+});
+
+// ── System Info ──
+const sysInfo = document.getElementById('sys-info');
+sysInfo.innerHTML = `
+  OS: ${navigator.platform}<br>
+  Tarayıcı: ${navigator.userAgent.includes('Chrome')?'Chrome':navigator.userAgent.includes('Firefox')?'Firefox':'Diğer'}<br>
+  Ekran: ${screen.width}×${screen.height}<br>
+  Dil: ${navigator.language}<br>
+  Çevrimiçi: ${navigator.onLine ? '✅ Evet' : '❌ Hayır'}<br>
+  V18 Build: Mega Pack
+`;
+
+// ── Action Functions ──
+function clearSiteCache() {
+  if(confirm('localStorage temizlensin mi?')) {
+    localStorage.clear();
+    alert('✅ Temizlendi!');
+  }
+}
+function clearLS() { clearSiteCache(); }
+function confirmReset() {
+  if(confirm('Tüm ayarlar sıfırlansın mı?')) {
+    localStorage.clear();
+    alert('✅ Sıfırlandı! Sayfa yenileniyor...');
+    location.reload();
+  }
+}
+function saveSettings() {
+  const settings = {
+    dark: document.getElementById('s-dark').checked,
+    cursor: document.getElementById('s-cursor').checked,
+    scroll: document.getElementById('s-scroll').checked,
+    anim: document.getElementById('s-anim').checked,
+    cookie: document.getElementById('s-cookie').checked,
+    counter: document.getElementById('s-counter').checked,
+    darkbtn: document.getElementById('s-darkbtn').checked,
+    badges: document.getElementById('s-badges').checked,
+  };
+  localStorage.setItem('apex-admin-settings', JSON.stringify(settings));
+  alert('✅ Ayarlar kaydedildi!');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>◈ DARKNET // Apex OS V18</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #050510;
+      --bg2: #0a0a1a;
+      --bg3: #0f0f28;
+      --cyan: #22d3ee;
+      --cyan2: #06b6d4;
+      --purple: #a78bfa;
+      --purple2: #7c3aed;
+      --pink: #f472b6;
+      --green: #34d399;
+      --red: #f87171;
+      --yellow: #fbbf24;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #475569;
+      --border: rgba(34,211,238,0.15);
+      --radius: 12px;
+      --glow: 0 0 20px rgba(34,211,238,0.2);
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Fira Code', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Matrix Background ── */
+    #matrix-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.04;
+    }
+
+    /* ── Login Screen ── */
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .login-logo {
+      font-size: 3rem;
+      animation: flicker 3s infinite;
+    }
+    @keyframes flicker {
+      0%,100% { opacity:1; }
+      92% { opacity:1; }
+      93% { opacity:0.3; }
+      94% { opacity:1; }
+      96% { opacity:0.4; }
+      97% { opacity:1; }
+    }
+    .login-title { font-size: 1.5rem; font-weight: 700; color: var(--cyan); letter-spacing: 0.2em; text-transform: uppercase; }
+    .login-subtitle { font-size: 0.8rem; color: var(--text3); letter-spacing: 0.1em; }
+    .login-box {
+      background: rgba(34,211,238,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 320px;
+    }
+    .login-field {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--cyan);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .login-field:focus { border-color: var(--cyan); box-shadow: var(--glow); }
+    .login-field::placeholder { color: var(--text3); }
+    .login-btn {
+      background: linear-gradient(135deg, var(--cyan2), var(--purple2));
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: var(--glow); }
+    .login-err { font-size: 0.75rem; color: var(--red); text-align: center; display: none; }
+    .login-hint { font-size: 0.7rem; color: var(--text3); text-align: center; }
+
+    /* ── Main App ── */
+    #main-app { display: none; position: relative; z-index: 1; min-height: 100vh; }
+
+    /* Top Bar */
+    #top-bar {
+      background: rgba(10,10,26,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-bar-logo { font-size: 1rem; font-weight: 700; color: var(--cyan); letter-spacing: 0.1em; }
+    .top-bar-logo span { color: var(--pink); }
+    .top-bar-links { display: flex; gap: 1rem; }
+    .top-bar-link {
+      font-size: 0.75rem;
+      color: var(--text2);
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.3s;
+    }
+    .top-bar-link:hover, .top-bar-link.active { color: var(--cyan); border-color: var(--border); }
+    .top-bar-right { display: flex; align-items: center; gap: 1rem; font-size: 0.75rem; color: var(--text3); }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.3);} }
+
+    /* Tab Content */
+    .tab-content { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    /* Section Title */
+    .dk-section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+    .dk-section-title span { color: var(--pink); }
+
+    /* Grid */
+    .dk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .dk-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .dk-card:hover { border-color: var(--cyan); box-shadow: var(--glow); transform: translateY(-3px); }
+    .dk-card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .dk-card-title { font-size: 0.9rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.5rem; }
+    .dk-card-desc { font-size: 0.75rem; color: var(--text2); line-height: 1.6; }
+
+    /* Terminal */
+    #terminal-box {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--green);
+      min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .t-line { margin: 4px 0; }
+    .t-prompt { color: var(--cyan); }
+    .t-err { color: var(--red); }
+    .t-info { color: var(--yellow); }
+    #terminal-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.4);
+    }
+    #terminal-prompt { color: var(--cyan); flex-shrink: 0; }
+    #terminal-cmd {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--green);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    /* Games Grid */
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .game-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .game-card:hover { border-color: var(--purple); box-shadow: 0 0 20px rgba(167,139,250,0.2); transform: translateY(-3px); }
+    .game-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .game-name { font-size: 0.85rem; font-weight: 700; color: var(--purple); margin-bottom: 0.25rem; }
+    .game-desc { font-size: 0.7rem; color: var(--text3); }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .stat-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    .stat-card-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .stat-card-val { font-size: 1.5rem; font-weight: 700; }
+
+    /* Chat */
+    #chat-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      height: 400px;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chat-msg {
+      background: rgba(34,211,238,0.05);
+      border: 1px solid rgba(34,211,238,0.1);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+    }
+    .chat-msg-user { color: var(--cyan); font-weight: 700; font-size: 0.7rem; margin-bottom: 2px; }
+    .chat-msg-text { color: var(--text2); }
+    .chat-msg.system { background: rgba(167,139,250,0.05); border-color: rgba(167,139,250,0.1); }
+    .chat-msg.system .chat-msg-user { color: var(--purple); }
+    #chat-input-wrap {
+      display: flex;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      overflow: hidden;
+    }
+    #chat-input {
+      flex: 1;
+      background: rgba(0,0,0,0.3);
+      border: none;
+      padding: 12px 1rem;
+      color: var(--text);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      outline: none;
+    }
+    #chat-send {
+      background: linear-gradient(135deg, var(--cyan2), var(--purple2));
+      border: none;
+      padding: 12px 1.5rem;
+      color: white;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+    #chat-send:hover { opacity: 0.85; }
+
+    /* Game Modal */
+    #game-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+    #game-modal.open { display: flex; }
+    #game-modal-inner {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 500px;
+      width: 95%;
+      text-align: center;
+    }
+    #game-canvas { border: 1px solid var(--border); border-radius: 8px; background: #000; display: block; margin: 1rem auto; }
+    .modal-title { font-size: 1.2rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.5rem; }
+    .modal-score { font-size: 0.85rem; color: var(--text2); margin-bottom: 1rem; }
+    .modal-btn {
+      background: linear-gradient(135deg, var(--cyan2), var(--purple2));
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+      margin: 0.25rem;
+      transition: all 0.3s;
+    }
+    .modal-btn:hover { transform: translateY(-2px); }
+    .modal-btn.close { background: rgba(255,255,255,0.05); border: 1px solid var(--border); }
+
+    /* Back btn */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(34,211,238,0.06);
+      border: 1px solid var(--border);
+      color: var(--cyan);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+      font-family: 'Fira Code', monospace;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: rgba(34,211,238,0.12); }
+
+    @media (max-width:640px) {
+      .top-bar-links { display: none; }
+      #top-bar { padding: 0.75rem 1rem; }
+      .tab-content { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-logo">◈</div>
+  <div>
+    <div class="login-title">DARKNET ACCESS</div>
+    <div class="login-subtitle" style="text-align:center;margin-top:0.25rem;">// Apex OS V18 — Restricted Zone</div>
+  </div>
+  <div class="login-box">
+    <input type="text" class="login-field" id="login-user" placeholder="USERNAME" autocomplete="off" />
+    <input type="password" class="login-field" id="login-pass" placeholder="PASSWORD" />
+    <button class="login-btn" id="login-btn">◈ SİSTEME GİR</button>
+    <div class="login-err" id="login-err">❌ Hatalı kimlik bilgileri. Erişim reddedildi.</div>
+    <div class="login-hint">// Hint: umut / 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════ MAIN APP ══════════════ -->
+<div id="main-app">
+  <div id="top-bar">
+    <div class="top-bar-logo">◈ darknet<span>.apex</span></div>
+    <div class="top-bar-links">
+      <div class="top-bar-link active" onclick="switchTab('dashboard')">Dashboard</div>
+      <div class="top-bar-link" onclick="switchTab('terminal')">Terminal</div>
+      <div class="top-bar-link" onclick="switchTab('games')">Mini Oyunlar</div>
+      <div class="top-bar-link" onclick="switchTab('chat')">Gölgeler Odası</div>
+      <div class="top-bar-link" onclick="switchTab('tools')">Araçlar</div>
+    </div>
+    <div class="top-bar-right">
+      <span class="status-dot"></span>
+      <span id="dk-user-display">umut@apex</span>
+      <span>·</span>
+      <a href="index.html" class="back-btn" style="margin:0;">← Ana Sayfa</a>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div class="tab-content active" id="tab-dashboard">
+    <h2 class="dk-section-title">◈ Sistem <span>Dashboard</span></h2>
+
+    <div class="stats-grid" style="margin-bottom:1.5rem;">
+      <div class="stat-card"><div class="stat-card-label">// oturum süresi</div><div class="stat-card-val" id="session-timer" style="color:var(--green);">00:00</div></div>
+      <div class="stat-card"><div class="stat-card-label">// tarayıcı</div><div class="stat-card-val" id="stat-browser" style="color:var(--cyan);font-size:1rem;"></div></div>
+      <div class="stat-card"><div class="stat-card-label">// yerel saat</div><div class="stat-card-val" id="stat-time" style="color:var(--purple);font-size:1rem;"></div></div>
+      <div class="stat-card"><div class="stat-card-label">// ekran çözünürlüğü</div><div class="stat-card-val" id="stat-res" style="color:var(--yellow);font-size:1rem;"></div></div>
+    </div>
+
+    <div class="dk-grid">
+      <div class="dk-card" onclick="switchTab('terminal')">
+        <div class="dk-card-icon">💻</div>
+        <div class="dk-card-title">Terminal Erişimi</div>
+        <div class="dk-card-desc">Komut satırı arayüzüyle sistem komutlarını çalıştır.</div>
+      </div>
+      <div class="dk-card" onclick="switchTab('games')">
+        <div class="dk-card-icon">🎮</div>
+        <div class="dk-card-title">Mini Oyunlar</div>
+        <div class="dk-card-desc">Snake, 2048, Pong ve daha fazlası — Darknet entertainment.</div>
+      </div>
+      <div class="dk-card" onclick="switchTab('chat')">
+        <div class="dk-card-icon">💬</div>
+        <div class="dk-card-title">Gölgeler Odası</div>
+        <div class="dk-card-desc">Anonim mesajlaşma odası. Kimliğini gizle, konuş.</div>
+      </div>
+      <div class="dk-card" onclick="switchTab('tools')">
+        <div class="dk-card-icon">🔧</div>
+        <div class="dk-card-title">Sistem Araçları</div>
+        <div class="dk-card-desc">Password üretici, şifreleme, QR kodu ve daha fazlası.</div>
+      </div>
+      <div class="dk-card" onclick="window.location.href='admin.html'">
+        <div class="dk-card-icon">⚙️</div>
+        <div class="dk-card-title">Admin Paneli</div>
+        <div class="dk-card-desc">Site yönetimi ve gelişmiş kontroller için admin paneline git.</div>
+      </div>
+      <div class="dk-card" onclick="window.location.href='index.html'">
+        <div class="dk-card-icon">🏠</div>
+        <div class="dk-card-title">Ana Siteye Dön</div>
+        <div class="dk-card-desc">Portfolio ana sayfasına geri dön.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TERMINAL ── -->
+  <div class="tab-content" id="tab-terminal">
+    <a href="#" class="back-btn" onclick="switchTab('dashboard');return false;">← Dashboard</a>
+    <h2 class="dk-section-title">◈ <span>Sistem Terminali</span> — Apex OS v18</h2>
+    <div id="terminal-box">
+      <div class="t-line"><span class="t-prompt">apex@darknet:~$</span> whoami</div>
+      <div class="t-line">umut_ince // authenticated user</div>
+      <div class="t-line"><span class="t-prompt">apex@darknet:~$</span> cat welcome.txt</div>
+      <div class="t-line" style="color:var(--cyan);">╔══════════════════════════════════════╗</div>
+      <div class="t-line" style="color:var(--cyan);">║   APEX OS V18 — DARKNET TERMINAL    ║</div>
+      <div class="t-line" style="color:var(--cyan);">║   Tüm işlemler kayıt altındadır.    ║</div>
+      <div class="t-line" style="color:var(--cyan);">╚══════════════════════════════════════╝</div>
+      <div class="t-line"><span class="t-prompt">apex@darknet:~$</span> <span style="animation:blink 1s infinite;">█</span></div>
+    </div>
+    <div id="terminal-input-wrap">
+      <span id="terminal-prompt">apex@darknet:~$</span>
+      <input type="text" id="terminal-cmd" placeholder="komut girin..." autocomplete="off" spellcheck="false" />
+    </div>
+    <div style="margin-top:0.5rem;font-size:0.7rem;color:var(--text3);">
+      Komutlar: help, whoami, date, ls, clear, matrix, about, skills
+    </div>
+  </div>
+
+  <!-- ── GAMES ── -->
+  <div class="tab-content" id="tab-games">
+    <a href="#" class="back-btn" onclick="switchTab('dashboard');return false;">← Dashboard</a>
+    <h2 class="dk-section-title">◈ Mini <span>Oyunlar</span></h2>
+    <div class="games-grid">
+      <div class="game-card" onclick="startSnake()">
+        <div class="game-icon">🐍</div>
+        <div class="game-name">SNAKE</div>
+        <div class="game-desc">Klasik yılan oyunu. Ok tuşlarıyla oyna.</div>
+      </div>
+      <div class="game-card" onclick="start2048()">
+        <div class="game-icon">🎯</div>
+        <div class="game-name">2048</div>
+        <div class="game-desc">Rakamları birleştir, 2048'e ulaş!</div>
+      </div>
+      <div class="game-card" onclick="startMemory()">
+        <div class="game-icon">🧠</div>
+        <div class="game-name">HAFIZA OYUNU</div>
+        <div class="game-desc">Eşleşen emoji çiftlerini bul.</div>
+      </div>
+      <div class="game-card" onclick="startRPS()">
+        <div class="game-icon">✂️</div>
+        <div class="game-name">TAŞ-KAĞIT-MAKAS</div>
+        <div class="game-desc">Bilgisayara karşı oyna.</div>
+      </div>
+      <div class="game-card" onclick="startGuessNum()">
+        <div class="game-icon">🔢</div>
+        <div class="game-name">SAYI TAHMİN</div>
+        <div class="game-desc">1-100 arası gizli sayıyı bul.</div>
+      </div>
+      <div class="game-card" onclick="startReaction()">
+        <div class="game-icon">⚡</div>
+        <div class="game-name">REAKSİYON TESTİ</div>
+        <div class="game-desc">Ne kadar hızlısın? Test et!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHAT ── -->
+  <div class="tab-content" id="tab-chat">
+    <a href="#" class="back-btn" onclick="switchTab('dashboard');return false;">← Dashboard</a>
+    <h2 class="dk-section-title">◈ Gölgeler <span>Odası</span></h2>
+    <div id="chat-box">
+      <div class="chat-msg system">
+        <div class="chat-msg-user">// SİSTEM</div>
+        <div class="chat-msg-text">Gölgeler Odasına hoş geldiniz. Kimliğiniz gizlidir. Saygılı olun.</div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-msg-user">shadow_user_01</div>
+        <div class="chat-msg-text">Darknet terminali keşfedildi. Apex OS güncellendi mi?</div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-msg-user">anon_99</div>
+        <div class="chat-msg-text">V18 harika görünüyor. Mini oyunlar çalışıyor!</div>
+      </div>
+    </div>
+    <div id="chat-input-wrap">
+      <input type="text" id="chat-input" placeholder="Mesajınızı yazın..." maxlength="200" />
+      <button id="chat-send" onclick="sendChat()">GÖNDER →</button>
+    </div>
+    <div style="margin-top:0.5rem;font-size:0.7rem;color:var(--text3);">// Enter tuşu ile de gönderebilirsiniz.</div>
+  </div>
+
+  <!-- ── TOOLS ── -->
+  <div class="tab-content" id="tab-tools">
+    <a href="#" class="back-btn" onclick="switchTab('dashboard');return false;">← Dashboard</a>
+    <h2 class="dk-section-title">◈ Sistem <span>Araçları</span></h2>
+    <div class="dk-grid">
+      <!-- Password Generator -->
+      <div style="grid-column:span 2;" class="dk-card" onclick="">
+        <div class="dk-card-title">🔐 Şifre Üretici</div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap;">
+          <select id="pwd-len" style="background:rgba(0,0,0,0.4);border:1px solid var(--border);color:var(--text);padding:6px;border-radius:6px;font-family:'Fira Code',monospace;">
+            <option value="12">12 Karakter</option>
+            <option value="16">16 Karakter</option>
+            <option value="24">24 Karakter</option>
+            <option value="32">32 Karakter</option>
+          </select>
+          <button onclick="genPassword()" style="background:linear-gradient(135deg,var(--cyan2),var(--purple2));border:none;color:white;padding:6px 16px;border-radius:6px;cursor:pointer;font-family:'Fira Code',monospace;font-size:0.8rem;">Üret</button>
+        </div>
+        <div id="pwd-output" style="margin-top:0.75rem;background:rgba(0,0,0,0.4);border:1px solid var(--border);padding:10px;border-radius:6px;font-size:0.8rem;color:var(--green);word-break:break-all;min-height:40px;"></div>
+        <button onclick="copyPwd()" style="margin-top:0.5rem;background:transparent;border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'Fira Code',monospace;">📋 Kopyala</button>
+      </div>
+
+      <!-- Hash Generator -->
+      <div class="dk-card">
+        <div class="dk-card-title">🔑 SHA256 Simülasyonu</div>
+        <input id="hash-input" type="text" placeholder="Metin girin..." style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;margin-top:0.75rem;font-family:'Fira Code',monospace;font-size:0.75rem;outline:none;" />
+        <button onclick="genHash()" style="margin-top:0.5rem;background:linear-gradient(135deg,var(--purple2),var(--pink));border:none;color:white;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'Fira Code',monospace;">Hash Üret</button>
+        <div id="hash-output" style="margin-top:0.5rem;font-size:0.65rem;color:var(--yellow);word-break:break-all;"></div>
+      </div>
+
+      <!-- Base64 -->
+      <div class="dk-card">
+        <div class="dk-card-title">🔄 Base64 Encoder</div>
+        <input id="b64-input" type="text" placeholder="Metin girin..." style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;margin-top:0.75rem;font-family:'Fira Code',monospace;font-size:0.75rem;outline:none;" />
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+          <button onclick="b64Encode()" style="background:rgba(34,211,238,0.15);border:1px solid var(--border);color:var(--cyan);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:0.7rem;font-family:'Fira Code',monospace;">Encode</button>
+          <button onclick="b64Decode()" style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.2);color:var(--purple);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:0.7rem;font-family:'Fira Code',monospace;">Decode</button>
+        </div>
+        <div id="b64-output" style="margin-top:0.5rem;font-size:0.65rem;color:var(--green);word-break:break-all;"></div>
+      </div>
+
+      <!-- Coin Flip -->
+      <div class="dk-card" style="text-align:center;">
+        <div class="dk-card-icon" id="coin-result">🪙</div>
+        <div class="dk-card-title">YAZIMI / TURA</div>
+        <div class="dk-card-desc" id="coin-text">Yazı mı tura mı? Karar ver.</div>
+        <button onclick="flipCoin()" style="margin-top:1rem;background:linear-gradient(135deg,var(--yellow),var(--red));border:none;color:white;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:'Fira Code',monospace;font-weight:700;">AT!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Game Modal -->
+<div id="game-modal">
+  <div id="game-modal-inner">
+    <div class="modal-title" id="gm-title">Oyun</div>
+    <div class="modal-score" id="gm-score">Skor: 0</div>
+    <canvas id="game-canvas" width="300" height="300"></canvas>
+    <div id="gm-extra" style="margin:0.5rem 0;min-height:80px;"></div>
+    <div>
+      <button class="modal-btn" id="gm-action-btn">▶ Başla</button>
+      <button class="modal-btn close" onclick="closeGame()">✕ Kapat</button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+</style>
+
+<script>
+// ── Matrix Background ──
+const matCanvas = document.getElementById('matrix-bg');
+const matCtx = matCanvas.getContext('2d');
+matCanvas.width = window.innerWidth;
+matCanvas.height = window.innerHeight;
+const cols = Math.floor(matCanvas.width / 16);
+const drops = Array(cols).fill(1);
+const matChars = 'アイウカキサシタニハヒマミヤラワ0123456789ABCDEF◈⚡▸▹';
+function drawMatrix() {
+  matCtx.fillStyle = 'rgba(5,5,16,0.05)';
+  matCtx.fillRect(0,0,matCanvas.width,matCanvas.height);
+  matCtx.fillStyle = '#22d3ee';
+  matCtx.font = '14px Fira Code';
+  drops.forEach((y, i) => {
+    const ch = matChars[Math.floor(Math.random() * matChars.length)];
+    matCtx.fillText(ch, i*16, y*16);
+    if (y * 16 > matCanvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+setInterval(drawMatrix, 50);
+
+// ── Login ──
+const CREDS = { user: 'umut', pass: '2026' };
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const p = document.getElementById('login-pass').value.trim();
+  const errEl = document.getElementById('login-err');
+  if (u === CREDS.user && p === CREDS.pass) {
+    document.getElementById('login-screen').style.opacity = '0';
+    document.getElementById('login-screen').style.transition = 'opacity 0.6s';
+    setTimeout(() => {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+      startSession();
+    }, 600);
+  } else {
+    errEl.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    setTimeout(() => errEl.style.display = 'none', 3000);
+  }
+}
+
+// ── Session ──
+function startSession() {
+  let sec = 0;
+  setInterval(() => {
+    sec++;
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    document.getElementById('session-timer').textContent = `${m}:${s}`;
+  }, 1000);
+
+  // Browser info
+  const ua = navigator.userAgent;
+  let br = 'Unknown';
+  if (ua.includes('Chrome') && !ua.includes('Edg')) br = 'Chrome';
+  else if (ua.includes('Firefox')) br = 'Firefox';
+  else if (ua.includes('Safari') && !ua.includes('Chrome')) br = 'Safari';
+  else if (ua.includes('Edg')) br = 'Edge';
+  document.getElementById('stat-browser').textContent = br;
+  document.getElementById('stat-res').textContent = `${screen.width}×${screen.height}`;
+
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('stat-time').textContent = now.toLocaleTimeString('tr-TR');
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+
+// ── Tab Switch ──
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.top-bar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const links = document.querySelectorAll('.top-bar-link');
+  const tabMap = ['dashboard','terminal','games','chat','tools'];
+  const idx = tabMap.indexOf(id);
+  if (idx >= 0) links[idx].classList.add('active');
+}
+
+// ── Terminal ──
+const termBox = document.getElementById('terminal-box');
+const termCmd = document.getElementById('terminal-cmd');
+
+const termCmds = {
+  help: () => `<span style="color:var(--cyan)">Mevcut komutlar:</span><br>whoami | date | ls | clear | matrix | about | skills | darknet`,
+  whoami: () => `umut_ince // YBS Öğrencisi & E-Ticaret Stratejisti`,
+  date: () => new Date().toLocaleString('tr-TR'),
+  ls: () => `<span style="color:var(--cyan)">index.html</span>  <span style="color:var(--green)">style.css</span>  <span style="color:var(--yellow)">script.js</span>  <span style="color:var(--pink)">dark.html</span>  <span style="color:var(--purple)">admin.html</span>`,
+  clear: () => null,
+  matrix: () => `<span style="color:var(--green)">Matrix modu aktif... bağlantı kuruldu.</span>`,
+  about: () => `<span style="color:var(--cyan)">Umut İnce</span><br>├ YBS / Yönetim Bilişim Sistemleri<br>├ E-Ticaret Stratejisti<br>├ Muay Thai & Okçuluk<br>└ umutince.online`,
+  skills: () => `JavaScript: <span style="color:var(--green)">████████░░</span> 88%<br>Python: <span style="color:var(--green)">████████░░</span> 82%<br>E-Ticaret: <span style="color:var(--green)">█████████░</span> 91%`,
+  darknet: () => `<span style="color:var(--pink)">◈ DARKNET MOD AKTİF</span><br>Tüm modüller yükleniyor...`,
+};
+
+termCmd.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const cmd = termCmd.value.trim().toLowerCase();
+  if (!cmd) return;
+  addTermLine(`<span class="t-prompt">apex@darknet:~$</span> ${cmd}`);
+  if (cmd in termCmds) {
+    const result = termCmds[cmd]();
+    if (result === null) {
+      termBox.innerHTML = '';
+    } else {
+      addTermLine(result);
+    }
+  } else {
+    addTermLine(`<span class="t-err">bash: ${cmd}: komut bulunamadı</span>`);
+  }
+  termCmd.value = '';
+  termBox.scrollTop = termBox.scrollHeight;
+});
+
+function addTermLine(html) {
+  const d = document.createElement('div');
+  d.className = 't-line';
+  d.innerHTML = html;
+  termBox.appendChild(d);
+}
+
+// ── Games ──
+let gameState = {};
+
+function closeGame() {
+  document.getElementById('game-modal').classList.remove('open');
+  if (gameState.interval) clearInterval(gameState.interval);
+  if (gameState.animFrame) cancelAnimationFrame(gameState.animFrame);
+  gameState = {};
+}
+
+// Rock Paper Scissors
+function startRPS() {
+  document.getElementById('game-modal').classList.add('open');
+  document.getElementById('gm-title').textContent = '✂️ Taş-Kağıt-Makas';
+  document.getElementById('gm-score').textContent = 'Seçimini yap!';
+  document.getElementById('game-canvas').style.display = 'none';
+  document.getElementById('gm-action-btn').style.display = 'none';
+  
+  const choices = ['🪨 Taş','📄 Kağıt','✂️ Makas'];
+  const vals = ['rock','paper','scissors'];
+  const wins = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
+  let score = 0;
+  
+  document.getElementById('gm-extra').innerHTML = `
+    <div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:0.75rem;">
+      ${choices.map((c,i) => `<button onclick="playRPS('${vals[i]}')" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:white;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:1rem;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">${c}</button>`).join('')}
+    </div>
+    <div id="rps-result" style="font-size:0.8rem;color:var(--text2);min-height:40px;"></div>
+    <div id="rps-score" style="color:var(--cyan);font-weight:700;margin-top:0.5rem;">Skor: 0</div>`;
+  
+  window.playRPS = function(choice) {
+    const cpuIdx = Math.floor(Math.random() * 3);
+    const cpu = vals[cpuIdx];
+    let result;
+    if (choice === cpu) result = '🤝 Berabere!';
+    else if (wins[choice] === cpu) { result = '✅ Kazandın!'; score++; }
+    else { result = '❌ Kaybettin!'; }
+    document.getElementById('rps-result').innerHTML = `Sen: ${choices[vals.indexOf(choice)]} vs CPU: ${choices[cpuIdx]} — <span style="color:${score > 0 ? 'var(--green)':'var(--red)'}">${result}</span>`;
+    document.getElementById('rps-score').textContent = `Skor: ${score}`;
+  };
+}
+
+// Guess Number
+function startGuessNum() {
+  document.getElementById('game-modal').classList.add('open');
+  document.getElementById('gm-title').textContent = '🔢 Sayı Tahmin Oyunu';
+  document.getElementById('game-canvas').style.display = 'none';
+  document.getElementById('gm-action-btn').style.display = 'none';
+  
+  let secret = Math.floor(Math.random()*100)+1;
+  let tries = 0;
+  document.getElementById('gm-score').textContent = 'Kalan hak: 10';
+  document.getElementById('gm-extra').innerHTML = `
+    <input id="guess-input" type="number" min="1" max="100" placeholder="1-100 arası bir sayı..." 
+      style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-family:'Fira Code',monospace;font-size:0.85rem;outline:none;margin-bottom:0.5rem;" />
+    <button onclick="makeGuess()" style="width:100%;background:linear-gradient(135deg,var(--cyan2),var(--purple2));border:none;color:white;padding:10px;border-radius:8px;cursor:pointer;font-family:'Fira Code',monospace;font-weight:700;">Tahmin Et!</button>
+    <div id="guess-result" style="margin-top:0.75rem;font-size:0.8rem;min-height:40px;"></div>`;
+  
+  document.getElementById('guess-input').addEventListener('keydown', e => { if(e.key==='Enter') makeGuess(); });
+  
+  window.makeGuess = function() {
+    const val = parseInt(document.getElementById('guess-input').value);
+    if (!val || val < 1 || val > 100) return;
+    tries++;
+    const rem = 10 - tries;
+    document.getElementById('gm-score').textContent = `Kalan hak: ${rem}`;
+    let msg = '';
+    if (val === secret) { msg = `<span style="color:var(--green)">🎉 Tebrikler! ${tries} denemede buldun!</span>`; secret = Math.floor(Math.random()*100)+1; tries=0; }
+    else if (rem === 0) { msg = `<span style="color:var(--red)">💀 Bitti! Sayı ${secret} idi.</span>`; secret = Math.floor(Math.random()*100)+1; tries=0; }
+    else if (val < secret) msg = `<span style="color:var(--cyan)">⬆ Daha büyük!</span>`;
+    else msg = `<span style="color:var(--pink)">⬇ Daha küçük!</span>`;
+    document.getElementById('guess-result').innerHTML = msg;
+    document.getElementById('guess-input').value = '';
+  };
+}
+
+// Reaction Test
+function startReaction() {
+  document.getElementById('game-modal').classList.add('open');
+  document.getElementById('gm-title').textContent = '⚡ Reaksiyon Testi';
+  document.getElementById('game-canvas').style.display = 'none';
+  document.getElementById('gm-action-btn').style.display = 'none';
+  document.getElementById('gm-score').textContent = 'Hazır ol!';
+  
+  let startTime = 0;
+  let waiting = false;
+  let canClick = false;
+  
+  document.getElementById('gm-extra').innerHTML = `
+    <div id="reaction-box" onclick="reactionClick()" style="background:var(--bg3);border:2px solid var(--border);border-radius:12px;padding:2rem;cursor:pointer;user-select:none;transition:all 0.3s;text-align:center;margin-bottom:0.5rem;">
+      <div id="reaction-msg" style="font-size:1.2rem;color:var(--text2);">Tıkla ve başla!</div>
+    </div>
+    <div id="reaction-times" style="font-size:0.75rem;color:var(--text3);"></div>`;
+  
+  let results = [];
+  window.reactionClick = function() {
+    const box = document.getElementById('reaction-box');
+    const msg = document.getElementById('reaction-msg');
+    if (!waiting && !canClick) {
+      waiting = true;
+      msg.textContent = '⏳ Bekle...';
+      box.style.borderColor = 'var(--yellow)';
+      const delay = 1000 + Math.random() * 3000;
+      setTimeout(() => {
+        canClick = true;
+        startTime = Date.now();
+        box.style.background = 'rgba(34,211,238,0.15)';
+        box.style.borderColor = 'var(--cyan)';
+        msg.textContent = '⚡ TIKLA!';
+        msg.style.color = 'var(--cyan)';
+      }, delay);
+    } else if (canClick) {
+      const elapsed = Date.now() - startTime;
+      results.push(elapsed);
+      waiting = false; canClick = false;
+      box.style.background = ''; box.style.borderColor = 'var(--border)';
+      msg.style.color = 'var(--text2)';
+      msg.textContent = `${elapsed}ms — Tekrar tıkla!`;
+      document.getElementById('gm-score').textContent = `Son: ${elapsed}ms`;
+      if (results.length > 1) {
+        const avg = Math.round(results.reduce((a,b)=>a+b,0)/results.length);
+        document.getElementById('reaction-times').textContent = `Ortalama: ${avg}ms (${results.length} deneme)`;
+      }
+    }
+  };
+}
+
+// Memory Game
+function startMemory() {
+  document.getElementById('game-modal').classList.add('open');
+  document.getElementById('gm-title').textContent = '🧠 Hafıza Oyunu';
+  document.getElementById('game-canvas').style.display = 'none';
+  document.getElementById('gm-action-btn').style.display = 'none';
+  
+  const emojis = ['🐍','⚡','🎯','💻','🔑','🌙','🚀','🎮'];
+  let cards = [...emojis, ...emojis].sort(() => Math.random()-0.5);
+  let flipped = [], matched = [], moves = 0, lock = false;
+  document.getElementById('gm-score').textContent = `Hamle: 0`;
+  
+  document.getElementById('gm-extra').innerHTML = `
+    <div id="mem-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:280px;margin:0 auto;"></div>`;
+  
+  const grid = document.getElementById('mem-grid');
+  cards.forEach((em, i) => {
+    const card = document.createElement('div');
+    card.style.cssText = `background:rgba(34,211,238,0.08);border:1px solid var(--border);border-radius:8px;height:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.5rem;transition:all 0.3s;user-select:none;`;
+    card.textContent = '?';
+    card.dataset.idx = i;
+    card.dataset.val = em;
+    card.addEventListener('click', function() {
+      if (lock || flipped.includes(i) || matched.includes(i)) return;
+      this.textContent = em;
+      this.style.background = 'rgba(167,139,250,0.2)';
+      flipped.push(i);
+      if (flipped.length === 2) {
+        lock = true; moves++;
+        document.getElementById('gm-score').textContent = `Hamle: ${moves}`;
+        const [a, b] = flipped;
+        if (cards[a] === cards[b]) {
+          matched.push(a, b);
+          grid.children[a].style.background = 'rgba(52,211,153,0.2)';
+          grid.children[b].style.background = 'rgba(52,211,153,0.2)';
+          flipped = []; lock = false;
+          if (matched.length === cards.length) {
+            document.getElementById('gm-score').textContent = `🎉 Tebrikler! ${moves} hamlede tamamladın!`;
+          }
+        } else {
+          setTimeout(() => {
+            [a, b].forEach(idx => {
+              grid.children[idx].textContent = '?';
+              grid.children[idx].style.background = 'rgba(34,211,238,0.08)';
+            });
+            flipped = []; lock = false;
+          }, 800);
+        }
+      }
+    });
+    grid.appendChild(card);
+  });
+}
+
+// Snake Game (simplified)
+function startSnake() {
+  document.getElementById('game-modal').classList.add('open');
+  document.getElementById('gm-title').textContent = '🐍 Snake';
+  document.getElementById('game-canvas').style.display = 'block';
+  document.getElementById('gm-action-btn').textContent = '▶ Başlat';
+  document.getElementById('gm-action-btn').style.display = 'inline-block';
+  document.getElementById('gm-extra').innerHTML = `<div style="font-size:0.75rem;color:var(--text3);">Ok tuşları ile yönet</div>`;
+  
+  const canvas = document.getElementById('game-canvas');
+  const ctx = canvas.getContext('2d');
+  const S = 12;
+  let snake = [{x:10,y:10}], dir={x:1,y:0}, food={x:5,y:5}, score=0, running=false;
+  
+  function placeFood() {
+    food = { x: Math.floor(Math.random()*(canvas.width/S)), y: Math.floor(Math.random()*(canvas.height/S)) };
+  }
+  
+  function draw() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#22d3ee';
+    snake.forEach(s => ctx.fillRect(s.x*S, s.y*S, S-1, S-1));
+    ctx.fillStyle = '#f472b6';
+    ctx.fillRect(food.x*S, food.y*S, S-1, S-1);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px Fira Code';
+    ctx.fillText('Skor: '+score, 4, 12);
+  }
+  
+  document.getElementById('gm-action-btn').onclick = function() {
+    if (running) { running=false; clearInterval(gameState.interval); this.textContent='▶ Başlat'; return; }
+    snake=[{x:10,y:10}]; dir={x:1,y:0}; score=0; running=true;
+    this.textContent='⏸ Durdur';
+    placeFood();
+    gameState.interval = setInterval(() => {
+      if (!running) return;
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      const W = canvas.width/S, H = canvas.height/S;
+      if (head.x<0||head.x>=W||head.y<0||head.y>=H||snake.some(s=>s.x===head.x&&s.y===head.y)) {
+        running=false; clearInterval(gameState.interval);
+        document.getElementById('gm-score').textContent = `Oyun Bitti! Skor: ${score}`;
+        document.getElementById('gm-action-btn').textContent='▶ Tekrar';
+        return;
+      }
+      snake.unshift(head);
+      if (head.x===food.x&&head.y===food.y) { score++; document.getElementById('gm-score').textContent=`Skor: ${score}`; placeFood(); }
+      else snake.pop();
+      draw();
+    }, 120);
+  };
+  
+  document.addEventListener('keydown', function snakeKey(e) {
+    if (!document.getElementById('game-modal').classList.contains('open')) { document.removeEventListener('keydown', snakeKey); return; }
+    const K = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
+    if (K[e.key] && !(K[e.key].x===-dir.x&&K[e.key].y===-dir.y)) { dir=K[e.key]; e.preventDefault(); }
+  });
+  draw();
+}
+
+// 2048 Simplified
+function start2048() {
+  document.getElementById('game-modal').classList.add('open');
+  document.getElementById('gm-title').textContent = '🎯 2048';
+  document.getElementById('game-canvas').style.display = 'none';
+  document.getElementById('gm-action-btn').style.display = 'none';
+  let grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]], score2048 = 0;
+  function addRandom() {
+    let empty = [];
+    grid.forEach((row,r)=>row.forEach((v,c)=>{ if(!v) empty.push({r,c}); }));
+    if (!empty.length) return;
+    const {r,c} = empty[Math.floor(Math.random()*empty.length)];
+    grid[r][c] = Math.random()<0.9 ? 2 : 4;
+  }
+  addRandom(); addRandom();
+  function render() {
+    const colors = {0:'#1a1a2e',2:'#22d3ee',4:'#06b6d4',8:'#a78bfa',16:'#7c3aed',32:'#f472b6',64:'#e11d48',128:'#fbbf24',256:'#f59e0b',512:'#34d399',1024:'#10b981',2048:'#00ff88'};
+    const html = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:280px;margin:0 auto;">
+      ${grid.flat().map(v=>`<div style="background:${colors[v]||'#333'};border-radius:6px;height:56px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${v>99?'0.8':'1'}rem;color:${v>4?'white':'#0f172a'}">${v||''}</div>`).join('')}
+    </div>`;
+    document.getElementById('gm-extra').innerHTML = html + `<div style="margin-top:0.5rem;font-size:0.75rem;color:var(--text3)">WASD veya ok tuşlarıyla oyna</div>`;
+    document.getElementById('gm-score').textContent = `Skor: ${score2048}`;
+  }
+  function slide(row) {
+    let arr = row.filter(v=>v), merged=false;
+    for(let i=0;i<arr.length-1;i++){if(arr[i]===arr[i+1]&&!merged){arr[i]*=2;score2048+=arr[i];arr.splice(i+1,1);merged=true;}else merged=false;}
+    while(arr.length<4) arr.push(0);
+    return arr;
+  }
+  function move(dir2048) {
+    const prev = JSON.stringify(grid);
+    if(dir2048==='left') grid=grid.map(r=>slide(r));
+    else if(dir2048==='right') grid=grid.map(r=>slide([...r].reverse()).reverse());
+    else if(dir2048==='up') { grid=grid[0].map((_,c)=>slide(grid.map(r=>r[c]))); grid=grid[0].map((_,c)=>grid.map(r=>r[c])); }
+    else if(dir2048==='down') { let t=grid[0].map((_,c)=>grid.map(r=>r[c])); t=t.map(r=>slide([...r].reverse()).reverse()); grid=t[0].map((_,c)=>t.map(r=>r[c])); }
+    if(JSON.stringify(grid)!==prev) addRandom();
+    render();
+  }
+  document.addEventListener('keydown', function g2048(e) {
+    if(!document.getElementById('game-modal').classList.contains('open')){document.removeEventListener('keydown',g2048);return;}
+    const m={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',a:'left',d:'right',w:'up',s:'down'};
+    if(m[e.key]){move(m[e.key]);e.preventDefault();}
+  });
+  render();
+}
+
+// ── Chat ──
+const chatNames = ['shadow_' + Math.floor(Math.random()*9000+1000)];
+let chatName = chatNames[0];
+
+document.getElementById('chat-input').addEventListener('keydown', e => { if(e.key==='Enter') sendChat(); });
+
+function sendChat() {
+  const inp = document.getElementById('chat-input');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  const box = document.getElementById('chat-box');
+  const el = document.createElement('div');
+  el.className = 'chat-msg';
+  el.innerHTML = `<div class="chat-msg-user">${chatName}</div><div class="chat-msg-text">${msg}</div>`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+  inp.value = '';
+  // Simüle edilmiş cevap
+  if (Math.random() > 0.5) {
+    setTimeout(() => {
+      const replies = ['Anlaşıldı.','Harika işler.','V18 çok iyi!','Darknet selamlar.','Sisteme girildi.'];
+      const rep = document.createElement('div');
+      rep.className = 'chat-msg';
+      rep.innerHTML = `<div class="chat-msg-user">anon_${Math.floor(Math.random()*100)}</div><div class="chat-msg-text">${replies[Math.floor(Math.random()*replies.length)]}</div>`;
+      box.appendChild(rep);
+      box.scrollTop = box.scrollHeight;
+    }, 1500 + Math.random()*2000);
+  }
+}
+
+// ── Tools ──
+function genPassword() {
+  const len = parseInt(document.getElementById('pwd-len').value);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}';
+  let pwd = '';
+  for (let i=0; i<len; i++) pwd += chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('pwd-output').textContent = pwd;
+}
+
+function copyPwd() {
+  const pwd = document.getElementById('pwd-output').textContent;
+  if (pwd) navigator.clipboard.writeText(pwd);
+}
+
+function genHash() {
+  const input = document.getElementById('hash-input').value;
+  // Fake hash (simülasyon)
+  let hash = '';
+  for (let i=0; i<64; i++) hash += Math.floor(Math.random()*16).toString(16);
+  document.getElementById('hash-output').textContent = hash || '(Metin girin)';
+}
+
+function b64Encode() {
+  try {
+    const v = btoa(unescape(encodeURIComponent(document.getElementById('b64-input').value)));
+    document.getElementById('b64-output').textContent = v;
+  } catch(e) { document.getElementById('b64-output').textContent = 'Hata!'; }
+}
+
+function b64Decode() {
+  try {
+    const v = decodeURIComponent(escape(atob(document.getElementById('b64-input').value)));
+    document.getElementById('b64-output').textContent = v;
+  } catch(e) { document.getElementById('b64-output').textContent = 'Geçersiz Base64!'; }
+}
+
+function flipCoin() {
+  const iconEl = document.getElementById('coin-result');
+  const textEl = document.getElementById('coin-text');
+  iconEl.style.animation = 'none';
+  const result = Math.random() > 0.5;
+  iconEl.textContent = result ? '🪙' : '🪙';
+  textEl.textContent = result ? '✅ YAZI!' : '🔵 TURA!';
+  textEl.style.color = result ? 'var(--green)' : 'var(--cyan)';
+}
+</script>
+</body>
+</html>
