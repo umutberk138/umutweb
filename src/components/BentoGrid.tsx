@@ -159,7 +159,7 @@ export const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
       <motion.div 
         variants={item}
         onClick={() => onNavigate?.('PORTFOLIO')}
-        className="md:col-span-1 bg-zinc-900 border border-apex-border rounded-3xl p-6 flex flex-col justify-center gap-3 group cursor-pointer relative overflow-hidden"
+        className="md:col-span-2 bg-zinc-900 border border-apex-border rounded-3xl p-6 flex flex-col justify-center gap-3 group cursor-pointer relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="flex items-center gap-2">

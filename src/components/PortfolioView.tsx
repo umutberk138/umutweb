@@ -76,7 +76,7 @@ export const PortfolioView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-16 pb-24 h-full overflow-y-auto pr-4 custom-scrollbar">
+    <div className="max-w-5xl mx-auto space-y-16 pb-24 pr-4">
       {/* Navigation */}
       <nav id="navbar" className="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-3xl p-3 mb-12 hidden md:block shadow-2xl">
         <ul className="flex justify-around items-center">
@@ -97,8 +97,8 @@ export const PortfolioView: React.FC = () => {
       <section id="about" className="scroll-mt-24 glass-panel rounded-[40px] p-10 neon-border relative overflow-hidden group">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 blur-[120px] pointer-events-none transition-all duration-1000 group-hover:bg-emerald-500/20" />
         <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
-          <div className="relative group/avatar">
-            <div className="w-64 h-64 bg-zinc-900 border-4 border-emerald-500/20 rounded-[64px] overflow-hidden shadow-2xl transition-all duration-700 group-hover/avatar:rounded-[32px] group-hover/avatar:border-emerald-500 group-hover/avatar:shadow-emerald-500/30">
+          <div className="relative group/avatar mt-10 md:mt-0">
+            <div className="w-48 h-48 md:w-64 md:h-64 bg-zinc-900 border-4 border-emerald-500/20 rounded-[48px] md:rounded-[64px] overflow-hidden shadow-2xl transition-all duration-700 group-hover/avatar:rounded-[32px] group-hover/avatar:border-emerald-500 group-hover/avatar:shadow-emerald-500/30">
               <img 
                 src={user?.mugshotUrl || "https://artifact.static-assets.app/api/projects/f3n5g6inymql2abq6cw6lo/artifacts/e66b447a-9bd1-4f9b-8e1d-a09c2a6be8b6"} 
                 alt="Umut İnce" 
@@ -115,10 +115,10 @@ export const PortfolioView: React.FC = () => {
                  {t('hero.status')}
                </span>
             </div>
-            <h1 className="text-7xl font-black italic uppercase tracking-tighter mb-6 leading-[0.9] text-white">
+            <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 leading-[0.9] text-white">
               {t('hero.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">İnce</span>
             </h1>
-            <p className="text-zinc-400 font-medium leading-relaxed max-w-xl text-xl mb-10 border-l-4 border-emerald-500/30 pl-8 italic">
+            <p className="text-zinc-400 font-medium leading-relaxed max-w-xl text-lg md:text-xl mb-10 border-l-4 border-emerald-500/30 pl-6 md:pl-8 italic">
               {t('hero.subtitle')}
             </p>
             <div className="flex flex-wrap justify-center md:justify-start gap-6">
@@ -172,8 +172,8 @@ export const PortfolioView: React.FC = () => {
               </div>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6 relative z-10">
                 <div>
-                  <h3 className="text-3xl font-black text-white uppercase italic tracking-tight group-hover:text-emerald-400 transition-colors drop-shadow-lg">{exp.title}</h3>
-                  <div className="flex items-center gap-4 mt-2">
+                  <h3 className="text-2xl md:text-3xl font-black text-white uppercase italic tracking-tight group-hover:text-emerald-400 transition-colors drop-shadow-lg">{exp.title}</h3>
+                  <div className="flex items-center flex-wrap gap-4 mt-2">
                     <p className="text-emerald-500 font-mono text-[12px] font-black uppercase tracking-[0.4em]">{exp.company}</p>
                     <span className="w-2 h-2 bg-zinc-700 rounded-full" />
                     <span className="text-zinc-500 font-mono text-[12px] font-bold uppercase tracking-widest">{exp.period}</span>
@@ -231,11 +231,11 @@ export const PortfolioView: React.FC = () => {
                <motion.div 
                  key={i}
                  whileHover={{ x: 10 }}
-                 className="bg-zinc-900/50 border border-white/5 p-8 rounded-3xl group transition-all"
+                 className="bg-zinc-900/50 border border-white/5 p-6 md:p-8 rounded-3xl group transition-all"
                >
-                 <div className="flex justify-between items-start mb-4">
+                 <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-2">
                    <h3 className="text-lg font-black uppercase tracking-tight text-white group-hover:text-emerald-400 transition-colors italic">{edu.school}</h3>
-                   <span className="px-3 py-1 bg-zinc-800 text-zinc-500 text-[10px] font-mono font-black uppercase tracking-widest rounded-lg">{edu.years}</span>
+                   <span className="px-3 py-1 bg-zinc-800 text-zinc-500 text-[10px] font-mono font-black uppercase tracking-widest rounded-lg self-start">{edu.years}</span>
                  </div>
                  <p className="text-zinc-400 font-bold text-sm tracking-wide mb-4">{edu.degree}</p>
                  <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${edu.status === 'Mezun' || edu.status === 'Graduated' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.2)]'}`}>
