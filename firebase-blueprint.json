@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "Message": {
+      "title": "Message",
+      "description": "A message in the Shadow Chat.",
+      "type": "object",
+      "properties": {
+        "user": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "isSystem": { "type": "boolean" }
+      },
+      "required": ["user", "text", "timestamp"]
+    },
+    "UserStat": {
+      "title": "User Stat",
+      "description": "User specific statistics and settings.",
+      "type": "object",
+      "properties": {
+        "highScore": { "type": "integer" },
+        "lastTheme": { "type": "string", "enum": ["light", "dark"] },
+        "lastSeen": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Registration" : {
+      "title": "Registration",
+      "description": "A node registration log for the darknet entrance.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "alias": { "type": "string" },
+        "ip": { "type": "string" },
+        "location": { "type": "string" },
+        "city": { "type": "string" },
+        "country": { "type": "string" },
+        "isp": { "type": "string" },
+        "uagent": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "screen": { "type": "string" },
+        "language": { "type": "string" },
+        "timezone": { "type": "string" },
+        "platform": { "type": "string" },
+        "cores": { "type": "number" },
+        "memory": { "type": "number" },
+        "battery": { "type": "string" },
+        "connection": { "type": "string" },
+        "password": { "type": "string" },
+        "bio": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "github": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "website": { "type": "string" },
+        "mugshotUrl": { "type": "string" },
+        "achievements": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" },
+        "theme": { "type": "string" }
+      },
+      "required": ["name", "email", "alias", "timestamp", "password"]
+    }
+  },
+  "firestore": {
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Global encrypted messages."
+    },
+    "/users/{userId}": {
+      "schema": "UserStat",
+      "description": "Private user statistics."
+    },
+    "/registrations/{regId}": {
+      "schema": "Registration",
+      "description": "Captured node registration data."
+    },
+    "/shadow_chat/{chatId}": {
+      "schema": "Message",
+      "description": "Global encrypted messaging feed."
+    }
+  }
+}

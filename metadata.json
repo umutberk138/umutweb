@@ -1,0 +1,6 @@
+{
+  "name": "Apex OS V18 // Umut İnce",
+  "description": "A high-performance professional portfolio powered by Apex OS V18. Featuring an interactive terminal, system dashboards, and immersive darknet experience.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": []
+}

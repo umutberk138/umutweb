@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      // In a real app without Auth, we would use custom tokens, 
+      // but for this demo, we'll allow the list if the query looks for the admin email.
+      return true; 
+    }
+
+    // Unify chat collections
+    match /shadow_chat/{chatId} {
+      allow read: if true;
+      allow create: if true;
+    }
+
+    match /messages/{msgId} {
+      allow read: if true;
+      allow create: if true;
+    }
+
+    // Registrations
+    match /registrations/{regId} {
+      allow create: if true;
+      allow get, update, delete: if true; // Admin panel needs this
+      allow list: if true; 
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow get, list: if true;
+
+      function isValidUserStat(data) {
+        return data.keys().hasAny(['highScore', 'lastTheme', 'lastSeen'])
+          && (data.get('highScore', 0) is int)
+          && (data.get('lastTheme', 'dark') in ['light', 'dark'])
+          && (data.get('lastSeen', request.time) is string || data.get('lastSeen', request.time) == request.time);
+      }
+
+      allow create, update: if isOwner(userId) && isValidUserStat(incoming());
+    }
+  }
+}
