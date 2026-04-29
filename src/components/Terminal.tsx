@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SnakeGame } from './SnakeGame';
-import { AccessGate } from './AccessGate';
+
 import { ShadowChat } from './ShadowChat';
 import { ToolsHub } from './ToolsHub';
 import { Terminal as TerminalIcon, ShieldCheck, ShieldX, Settings } from 'lucide-react';
