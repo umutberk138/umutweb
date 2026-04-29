@@ -15,6 +15,7 @@ import {
   MessageSquare,
   Activity
 } from 'lucide-react';
+import profileImg from '../assets/profile.jpg';
 
 export const PortfolioView: React.FC = () => {
   const { t, lang } = useI18n();
@@ -100,7 +101,7 @@ export const PortfolioView: React.FC = () => {
           <div className="relative group/avatar mt-10 md:mt-0">
             <div className="w-48 h-48 md:w-64 md:h-64 bg-zinc-900 border-4 border-emerald-500/20 rounded-[48px] md:rounded-[64px] overflow-hidden shadow-2xl transition-all duration-700 group-hover/avatar:rounded-[32px] group-hover/avatar:border-emerald-500 group-hover/avatar:shadow-emerald-500/30">
               <img 
-                src={user?.mugshotUrl || "https://artifact.static-assets.app/api/projects/f3n5g6inymql2abq6cw6lo/artifacts/e66b447a-9bd1-4f9b-8e1d-a09c2a6be8b6"} 
+                src={user?.mugshotUrl || profileImg} 
                 alt="Umut İnce" 
                 className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover/avatar:grayscale-0 group-hover/avatar:scale-110"
               />
