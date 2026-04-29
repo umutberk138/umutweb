@@ -1,54 +1,151 @@
-# Apex Hub OS v2.4 - Unified Portfolio & Admin Command Center
+# Umut İnce — Portfolio & Apex Hub OS
 
-![System Status](https://img.shields.io/badge/Status-Online-emerald)
-![Security Level](https://img.shields.io/badge/Security-MIL--SPEC-blue)
-![Language](https://img.shields.io/badge/Language-TypeScript-darkred)
+> Yönetim Bilişim Sistemleri öğrencisi, Full-Stack Geliştirici ve Amazon E-Ticaret Stratejisti.
 
-A sophisticated, cyberpunk-inspired digital ecosystem serving as both a professional portfolio for **Umut İnce** and a real-time administrative command center. Engineered for the Web Programming-I Course at **Cappadocia University**, this project demonstrates high-level integration of React ecosystems with Firebase cloud infrastructure.
-
-## 🚀 System Architecture
-
-### 🏛️ Professional Portfolio Node
-- **Biographic Data:** High-fidelity overview of professional identity and vision.
-- **Experience Layer:** Chronological mapping of career nodes and technical contributions.
-- **Education Matrix:** Structured data visualization of academic accomplishments via semantic tables.
-- **Skill Vectors:** Dynamic progress monitoring of core technical competencies.
-- **Project Index:** A responsive gallery of architected digital assets with interactive physics.
-- **Transmission Portal:** Unified contact interface with direct WhatsApp API hooks and professional email routing.
-
-### 🛡️ Admin Command Center
-- **Network Metrics:** Real-time visualization of system traffic and chat volume via Recharts.
-- **Kernel Monitoring:** Live-streaming system status logs and heartbeat monitoring.
-- **Node Authentication:** Secure listing of authorized system nodes via Firestore Auth integration.
-- **Security Protocols:** Hardened Firebase Security Rules (v4.1) providing robust data isolation and integrity.
-
-## 🛠️ Technical Stack
-
-- **Engine:** React 18+ (TS Engine)
-- **Fluid UI:** Framer Motion (Optimized Transitions)
-- **Styling Core:** Tailwind CSS v4 (Industrial Theme)
-- **Data Persistence:** Firebase Firestore (Real-time Sync)
-- **Identity:** Google OAuth (Auth Layer)
-- **Analytics:** Recharts (Data Viz)
-
-## 📂 Deployment Configuration
-
-1. **Initialize Environment:**
-   ```bash
-   npm install
-   ```
-2. **Execute Dev Protocol:**
-   ```bash
-   npm run dev
-   ```
-3. **Build Production Binary:**
-   ```bash
-   npm run build
-   ```
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=flat&logo=vite)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com)
+[![Firebase](https://img.shields.io/badge/Firebase-12-FFCA28?style=flat&logo=firebase)](https://firebase.google.com)
 
 ---
-**Core Developer:** Umut İnce  
-**Student ID:** 24903032  
-**Department:** Management Information Systems (YBS)  
-**University:** Kapadokya Üniversitesi  
-**Contact:** [umutberk138@gmail.com](mailto:umutberk138@gmail.com)  
+
+## ✨ Özellikler
+
+| Modül | Açıklama |
+|---|---|
+| **Portfolio** | Hakkımda, deneyim, yetenekler, projeler, SSS ve iletişim bölümleri |
+| **Bento Grid** | Dinamik, kartlara dayalı ana sayfa |
+| **Darknet Gate** | Kullanıcı kayıt ve giriş sistemi — Firebase Firestore destekli |
+| **Admin Paneli** | Kayıtlı düğümleri listele, detaylarına göz at, sil |
+| **Terminal** | İnteraktif komut satırı arayüzü ile snake oyunu, chat ve araçlar |
+| **Dark/Light Mod** | Tema tercihi localStorage'de kalıcı olarak saklanır |
+| **TR/EN Dil Desteği** | Tam çeviri tablosu ile anlık dil değiştirme |
+| **Command Palette** | `Ctrl+K` ile hızlı navigasyon |
+| **Bildirim Merkezi** | Gerçek zamanlı sistem bildirimleri |
+
+---
+
+## 🚀 Kurulum
+
+### Gereksinimler
+- Node.js 18+
+- npm veya yarn
+
+### Adımlar
+
+```bash
+# 1. Repoyu klonla
+git clone https://github.com/umutberk138/umut-ince.git
+cd umut-ince
+
+# 2. Bağımlılıkları yükle
+npm install
+
+# 3. Ortam değişkenlerini ayarla
+cp .env.example .env
+# .env dosyasını düzenle ve Firebase / Gemini API anahtarlarını gir
+
+# 4. Geliştirme sunucusunu başlat
+npm run dev
+```
+
+Uygulama `http://localhost:3000` adresinde çalışacaktır.
+
+---
+
+## 🔧 Ortam Değişkenleri
+
+`.env.example` dosyasını kopyala ve aşağıdaki değerleri doldur:
+
+```env
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+GEMINI_API_KEY=...
+```
+
+---
+
+## 📁 Proje Yapısı
+
+```
+.
+├── src/
+│   ├── components/          # UI bileşenleri
+│   │   ├── AdminPanel.tsx   # Admin yönetim paneli
+│   │   ├── AmbientSystem.tsx
+│   │   ├── BentoGrid.tsx    # Ana dashboard grid
+│   │   ├── CommandPalette.tsx
+│   │   ├── DarknetGate.tsx  # Kullanıcı auth + kayıt
+│   │   ├── DarknetDashboard.tsx
+│   │   ├── MatrixBackground.tsx
+│   │   ├── NotificationCenter.tsx
+│   │   ├── PortfolioView.tsx # CV / portfolyo sayfası
+│   │   ├── Profile.tsx
+│   │   ├── Terminal.tsx     # İnteraktif terminal
+│   │   └── ...
+│   ├── lib/
+│   │   ├── firebase.ts      # Firebase yapılandırması
+│   │   └── i18n.tsx         # TR/EN çeviri sistemi
+│   ├── App.tsx              # Kök bileşen + navigasyon
+│   ├── App.css              # Tasarım sistemi (animasyonlar, scrollbar)
+│   ├── index.css            # Tailwind v4 + tema değişkenleri
+│   ├── main.tsx             # React giriş noktası
+│   └── types.ts             # TypeScript tipleri
+├── public/
+├── firebase-blueprint.json  # Firestore kuralları şeması
+├── firestore.rules          # Güvenlik kuralları
+├── vite.config.ts
+└── package.json
+```
+
+---
+
+## 🛠️ Teknoloji Yığını
+
+- **Framework:** React 19 + TypeScript 5.8
+- **Build Tool:** Vite 6
+- **Styling:** Tailwind CSS v4 + Vanilla CSS design tokens
+- **Animations:** Motion (Framer Motion v12)
+- **Database:** Firebase Firestore
+- **Auth:** Firebase Auth (Google + özel sistem)
+- **Icons:** Lucide React
+- **Fonts:** Outfit (sans-serif) + Fira Code (monospace)
+
+---
+
+## 📜 Komutlar
+
+```bash
+npm run dev      # Geliştirme sunucusu (localhost:3000)
+npm run build    # Üretim build'i
+npm run preview  # Build önizleme
+npm run lint     # TypeScript tip kontrolü
+```
+
+---
+
+## 🔒 Güvenlik
+
+- Firestore güvenlik kuralları `firestore.rules` dosyasında tanımlanmıştır
+- `.env` dosyaları `.gitignore` kapsamındadır — asla commit edilmez
+- Admin paneli şifre korumalıdır
+
+---
+
+## 📬 İletişim
+
+- **E-posta:** umut@umutince.online
+- **GitHub:** [@umutberk138](https://github.com/umutberk138)
+- **Instagram:** [@umutberknc](https://instagram.com/umutberknc)
+- **WhatsApp:** [+90 540 089 32 52](https://wa.me/905400893252)
+
+---
+
+<p align="center">
+  © 2026 Umut İnce — Node_ID: 24903032 — Kapadokya Üniversitesi BIS
+</p>

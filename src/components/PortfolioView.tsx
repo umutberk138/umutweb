@@ -8,7 +8,6 @@ import {
   FolderRoot, 
   Mail, 
   Github, 
-  Linkedin, 
   ExternalLink,
   ChevronRight,
   Send,
@@ -130,11 +129,24 @@ export const PortfolioView: React.FC = () => {
                 {t('hero.initiate')}
               </button>
               <div className="flex gap-3">
-                 <a href="https://github.com/umutberk138" target="_blank" rel="noreferrer" className="p-5 bg-zinc-900/80 border border-white/5 rounded-3xl text-zinc-400 hover:text-white hover:border-emerald-500/50 hover:bg-zinc-900 transition-all shadow-xl"><Github size={24} /></a>
+               <a href="https://github.com/umutberk138" target="_blank" rel="noreferrer" className="p-5 bg-zinc-900/80 border border-white/5 rounded-3xl text-zinc-400 hover:text-white hover:border-emerald-500/50 hover:bg-zinc-900 transition-all shadow-xl"><Github size={24} /></a>
                  <a href="https://instagram.com/umutberknc" target="_blank" rel="noreferrer" className="p-5 bg-zinc-900/80 border border-white/5 rounded-3xl text-zinc-400 hover:text-white hover:border-rose-500/50 hover:bg-zinc-900 transition-all shadow-xl">
-                   <svg size={24} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                  </a>
               </div>
+            </div>
+            
+            <div className="flex gap-8 mt-12 justify-center md:justify-start">
+               {[
+                 { label: t('hero.stat_exp'), target: 3, suffix: '+' },
+                 { label: t('hero.stat_proj'), target: 12, suffix: '+' },
+                 { label: t('hero.stat_sports'), target: 5, suffix: '+' }
+               ].map((stat, i) => (
+                 <div key={i} className="flex flex-col items-center md:items-start group">
+                    <span className="text-4xl font-black text-white group-hover:text-emerald-400 transition-colors">{stat.target}{stat.suffix}</span>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-500 mt-2 text-center md:text-left leading-tight">{stat.label}</span>
+                 </div>
+               ))}
             </div>
           </div>
         </div>
@@ -313,7 +325,7 @@ export const PortfolioView: React.FC = () => {
                </a>
                <a href="https://wa.me/905400893252" target="_blank" rel="noreferrer" className="flex items-center gap-8 text-zinc-500 group cursor-pointer hover:text-emerald-500 transition-all duration-500">
                   <div className="p-5 bg-zinc-950 border border-white/5 rounded-3xl group-hover:neon-border group-hover:bg-emerald-500/10 transition-all shadow-2xl">
-                    <Linkedin size={28} />
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[11px] font-mono text-zinc-700 font-black uppercase tracking-[0.3em] mb-1">{t('contact.whatsapp')}</span>

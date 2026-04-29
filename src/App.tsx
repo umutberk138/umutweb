@@ -2,19 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BentoGrid } from './components/BentoGrid';
 import { Terminal } from './components/Terminal';
-import { Dashboard } from './components/Dashboard';
 import { MatrixBackground } from './components/MatrixBackground';
 import { AppMode } from './types';
 import { Monitor, Terminal as TerminalIcon, LayoutGrid, Sun, Moon, LogIn, LogOut, User } from 'lucide-react';
 import { db } from './lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { NotificationCenter } from './components/NotificationCenter';
 import { Profile } from './components/Profile';
 import { PortfolioView } from './components/PortfolioView';
 import { DarknetGate } from './components/DarknetGate';
 import { AdminPanel } from './components/AdminPanel';
 import { useI18n } from './lib/i18n';
-
 import { CommandPalette } from './components/CommandPalette';
 import { AmbientSystem } from './components/AmbientSystem';
 
@@ -250,15 +248,15 @@ export default function App() {
       <footer className="fixed bottom-0 left-0 right-0 z-40 px-8 py-4 pointer-events-none">
         <div className="max-w-6xl mx-auto flex justify-between items-center text-[10px] font-mono font-bold text-zinc-600 tracking-[0.2em] uppercase">
           <div className="flex gap-4">
-            <span>System Ready for Deployment</span>
+            <span>System Ready</span>
             <span>Uptime: 99.98%</span>
           </div>
           <div className="flex gap-4 items-center">
             <div className="flex gap-1 items-center">
               <span className="w-1.5 h-1.5 bg-apex-accent rounded-full animate-blink" />
-              <span>Optimized Context</span>
+              <span>Encrypted</span>
             </div>
-            <span>Last Update: 16:38 UTC</span>
+            <span>umutince.online</span>
           </div>
         </div>
       </footer>

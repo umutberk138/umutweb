@@ -20,10 +20,13 @@ const translations = {
     },
     hero: {
       title: 'Umut',
-      subtitle: 'Bilişim sistemleri ve E-ticaret uzmanı. Kapadokya Üniversitesi 2. sınıf öğrencisi.',
+      subtitle: 'Yönetim Bilişim Sistemleri öğrencisi, dijital strateji tutkunu ve disiplinini hayatın her alanına yansıtan bir sporcu. Teknoloji ve iş dünyasını harmanlayarak değer üretiyorum.',
       status: 'DÜĞÜM DURUMU: DOĞRULANDI',
       role: 'OPERATÖR v2.4',
-      initiate: 'Projeyi Başlat',
+      initiate: 'İletişime Geç',
+      stat_exp: 'Yıl Deneyim',
+      stat_proj: 'Tamamlanan Proje',
+      stat_sports: 'Spor Dalı'
     },
     experience: {
       title: 'Kariyer Geçmişi',
@@ -212,10 +215,13 @@ const translations = {
     },
     hero: {
       title: 'Umut',
-      subtitle: 'Information systems and E-commerce specialist. 2nd-year student at Cappadocia University.',
+      subtitle: 'Management Information Systems student, digital strategy enthusiast, and an athlete reflecting discipline in every aspect of life. Creating value by blending technology and business.',
       status: 'NODE STATUS: VERIFIED',
       role: 'OPERATOR v2.4',
-      initiate: 'Initiate Project',
+      initiate: 'Initiate Contact',
+      stat_exp: 'Years Exp.',
+      stat_proj: 'Projects Completed',
+      stat_sports: 'Sports Branches'
     },
     experience: {
       title: 'Career Experience',

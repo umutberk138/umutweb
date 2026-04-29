@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Hash, Lock, Unlock, Mail, ShieldAlert, Cpu } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Hash, Lock, Unlock, Mail, ShieldAlert, Cpu } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 export const SecurityTools: React.FC = () => {

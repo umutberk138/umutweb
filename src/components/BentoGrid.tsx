@@ -75,7 +75,7 @@ export const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         <div className="flex gap-4 mt-8">
           <a href="https://github.com/umutberk138" target="_blank" rel="noreferrer" className="p-3 bg-zinc-800 border border-zinc-700 rounded-xl hover:bg-apex-accent/20 text-white transition-all"><Github size={20} /></a>
           <a href="https://wa.me/905400893252" target="_blank" rel="noreferrer" className="p-3 bg-zinc-800 border border-zinc-700 rounded-xl hover:bg-apex-accent/20 text-white transition-all">
-            <svg size={20} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.8 8.38 8.38 0 0 1 3.8.9L21 3.2Z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.8 8.38 8.38 0 0 1 3.8.9L21 3.2Z"/></svg>
           </a>
           <a href="mailto:umutberk138@gmail.com" className="p-3 bg-zinc-800 border border-zinc-700 rounded-xl hover:bg-apex-accent/20 text-white transition-all"><Mail size={20} /></a>
         </div>
