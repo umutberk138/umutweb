@@ -9,7 +9,7 @@ interface CommandPaletteProps {
 }
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({ onClose, onNavigate }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 

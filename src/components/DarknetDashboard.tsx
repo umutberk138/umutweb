@@ -15,7 +15,7 @@ interface DarknetDashboardProps {
 }
 
 export const DarknetDashboard: React.FC<DarknetDashboardProps> = ({ alias }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [activeTab, setActiveTab] = useState<'HOME' | 'GAMES' | 'CHAT' | 'CORTEX' | 'STORAGE' | 'AWARDS'>('HOME');
 
   const tabLabels: Record<string, string> = {
