@@ -4,8 +4,10 @@ import { Bell, X, Info, CheckCircle, AlertTriangle } from 'lucide-react';
 import { SystemNotification } from '../types';
 import { db } from '../lib/firebase';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { useI18n } from '../lib/i18n';
 
 export const NotificationCenter: React.FC = () => {
+  const { lang } = useI18n();
   const [notifications, setNotifications] = useState<SystemNotification[]>([]);
 
   useEffect(() => {
@@ -21,9 +23,10 @@ export const NotificationCenter: React.FC = () => {
       
       if (!snap.empty) {
         const data = snap.docs[0].data();
+        const alias = data.alias || (lang === 'TR' ? 'Bilinmeyen' : 'Unknown');
         const newNotif: SystemNotification = {
           id: snap.docs[0].id,
-          title: `New Transmission from ${data.alias || 'Unknown'}`,
+          title: lang === 'TR' ? `${alias} Kişisinden Yeni İleti` : `New Transmission from ${alias}`,
           message: (data.text || '').length > 50 ? (data.text || '').substring(0, 50) + '...' : (data.text || ''),
           type: data.isSystem ? 'alert' : 'success',
           timestamp: Date.now()
@@ -39,7 +42,7 @@ export const NotificationCenter: React.FC = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [lang]);
 
   return (
     <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none">

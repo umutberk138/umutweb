@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Trash2, Calendar, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useI18n } from '../lib/i18n';
 
 export const ShadowPad: React.FC = () => {
+    const { t, lang } = useI18n();
     const [note, setNote] = useState('');
     const [saved, setSaved] = useState(false);
 
@@ -18,7 +20,7 @@ export const ShadowPad: React.FC = () => {
     };
 
     const clear = () => {
-        if (confirm('ERASE_ALL_DATA?')) {
+        if (confirm(lang === 'TR' ? 'TÜM VERİLER SİLİNSİN Mİ?' : 'ERASE ALL DATA?')) {
             setNote('');
             localStorage.removeItem('shadow_note');
         }
@@ -46,7 +48,7 @@ export const ShadowPad: React.FC = () => {
                value={note}
                spellCheck={false}
                onChange={e => setNote(e.target.value)}
-               placeholder="INITIATE_TACTICAL_LOGS..."
+               placeholder={lang === 'TR' ? 'TAKTIK_GÜNLÜKLERİ_BAŞLATILIYOR...' : 'INITIATE_TACTICAL_LOGS...'}
             />
 
             <div className="p-3 bg-zinc-900/50 flex justify-between items-center px-6">
@@ -62,7 +64,7 @@ export const ShadowPad: React.FC = () => {
                             exit={{ opacity: 0 }}
                             className="text-[9px] text-emerald-500 font-black uppercase animate-pulse"
                         >
-                            Sector_Committed
+                            {lang === 'TR' ? 'Sektör_Kaydedildi' : 'Sector_Committed'}
                         </motion.span>
                     )}
                 </AnimatePresence>

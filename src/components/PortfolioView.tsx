@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 export const PortfolioView: React.FC = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [user, setUser] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -67,8 +67,8 @@ export const PortfolioView: React.FC = () => {
   ];
 
   const education = [
-    { school: 'Kapadokya Üniversitesi', degree: 'Yönetim Bilişim Sistemleri (BIS)', years: '2024 - 2026', status: '2. Sınıf' },
-    { school: 'Anadolu Lisesi', degree: 'Fen Bilimleri', years: '2019 - 2023', status: 'Mezun' }
+    { school: 'Kapadokya Üniversitesi', degree: 'Yönetim Bilişim Sistemleri (BIS)', years: '2024 - 2026', status: lang === 'TR' ? '2. Sınıf' : '2nd Year' },
+    { school: 'Anadolu Lisesi', degree: 'Fen Bilimleri', years: '2019 - 2023', status: lang === 'TR' ? 'Mezun' : 'Graduated' }
   ];
 
   const scrollTo = (id: string) => {
@@ -212,7 +212,7 @@ export const PortfolioView: React.FC = () => {
 
         <section id="education" className="scroll-mt-24">
            <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-5 text-white">
-             <GraduationCap size={32} className="text-emerald-500" /> Eğitim
+             <GraduationCap size={32} className="text-emerald-500" /> {lang === 'TR' ? 'Eğitim' : 'Education'}
            </h2>
            <div className="space-y-6">
              {education.map((edu, i) => (
@@ -226,7 +226,7 @@ export const PortfolioView: React.FC = () => {
                    <span className="px-3 py-1 bg-zinc-800 text-zinc-500 text-[10px] font-mono font-black uppercase tracking-widest rounded-lg">{edu.years}</span>
                  </div>
                  <p className="text-zinc-400 font-bold text-sm tracking-wide mb-4">{edu.degree}</p>
-                 <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${edu.status === 'Mezun' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.2)]'}`}>
+                 <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${edu.status === 'Mezun' || edu.status === 'Graduated' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.2)]'}`}>
                     {edu.status}
                  </span>
                </motion.div>

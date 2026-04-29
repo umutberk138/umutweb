@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { File, Folder, HardDrive, Search, Terminal, ArrowUp } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useI18n } from '../lib/i18n';
 
 export const FileExplorer: React.FC = () => {
-  const [path, setPath] = useState(['HOME']);
+  const { t } = useI18n();
+  const [path, setPath] = useState([t('file_explorer.home')]);
   const files = [
-    { name: 'PROJECTS', type: 'FOLDER', size: '4.2GB' },
-    { name: 'IDENTITIES', type: 'FOLDER', size: '128KB' },
-    { name: 'UPLINK_LOGS.TXT', type: 'FILE', size: '12KB' },
-    { name: 'SHADOW_KEY.PRIVATE', type: 'FILE', size: '4KB' },
-    { name: 'AMAZON_STRATEGY.PDF', type: 'FILE', size: '1.2MB' },
-    { name: 'CAPPADOCIA_NODE.SYS', type: 'FILE', size: '88KB' },
+    { name: t('file_explorer.projects'), type: 'FOLDER', size: '4.2GB' },
+    { name: t('file_explorer.identities'), type: 'FOLDER', size: '128KB' },
+    { name: t('file_explorer.logs'), type: 'FILE', size: '12KB' },
+    { name: t('file_explorer.key'), type: 'FILE', size: '4KB' },
+    { name: t('file_explorer.strategy'), type: 'FILE', size: '1.2MB' },
+    { name: t('file_explorer.node_sys'), type: 'FILE', size: '88KB' },
   ];
 
   return (
@@ -55,9 +57,9 @@ export const FileExplorer: React.FC = () => {
       <div className="p-3 bg-zinc-900/50 border-t border-white/5 flex justify-between items-center px-6">
          <div className="flex items-center gap-2">
             <HardDrive size={12} className="text-zinc-600" />
-            <span className="text-[9px] text-zinc-600 font-bold">APEX_STORAGE: 74% FULL</span>
+            <span className="text-[9px] text-zinc-600 font-bold">{t('widgets.storage_usage').replace('%{usage}', '74%')}</span>
          </div>
-         <span className="text-[9px] text-zinc-700">6 ITEMS TOTAL</span>
+         <span className="text-[9px] text-zinc-700">{t('widgets.total_items').replace('%{count}', '6')}</span>
       </div>
     </div>
   );

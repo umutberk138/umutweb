@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Music, Maximize2, SkipForward } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
 
 export const AmbientSystem: React.FC = () => {
+  const { t } = useI18n();
   const [isPlaying, setIsPlaying] = useState(false);
   const [level, setLevel] = useState(Array(15).fill(0));
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -31,9 +33,9 @@ export const AmbientSystem: React.FC = () => {
       
       <div className="flex flex-col">
         <span className="text-[8px] font-mono text-emerald-500 font-black uppercase tracking-widest animate-pulse">
-          {isPlaying ? 'Ambient_Layer_Active' : 'Acoustic_Dormant'}
+          {isPlaying ? t('ambient.active') : t('ambient.dormant')}
         </span>
-        <span className="text-[9px] font-mono text-zinc-500">CYBER_NOIR_MIX_4.MP3</span>
+        <span className="text-[9px] font-mono text-zinc-500">{t('ambient.track')}</span>
       </div>
 
       <button 

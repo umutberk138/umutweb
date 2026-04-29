@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Target, Award, Terminal, Cpu, Zap, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useI18n } from '../lib/i18n';
 
 export const AchievementTracker: React.FC = () => {
+    const { t } = useI18n();
     const [achievements, setAchievements] = useState<string[]>([]);
     const [latest, setLatest] = useState<string | null>(null);
 
     const list = [
-        { id: 'first_login', title: 'NODE_DISCOVERY', desc: 'Securely accessed the Shadow Network.', icon: <Shield size={18} /> },
-        { id: 'cli_user', title: 'CLI_OPERATOR', desc: 'Used the terminal interface.', icon: <Terminal size={18} /> },
-        { id: 'game_master', title: 'NEURAL_REFLEX', desc: 'Played the Snake protocol.', icon: <Target size={18} /> },
-        { id: 'profile_updated', title: 'IDENTITY_SYNC', desc: 'Modified node bio.', icon: <Zap size={18} /> },
+        { id: 'first_login', title: t('achievements.first_login.title'), desc: t('achievements.first_login.desc'), icon: <Shield size={18} /> },
+        { id: 'cli_user', title: t('achievements.cli_user.title'), desc: t('achievements.cli_user.desc'), icon: <Terminal size={18} /> },
+        { id: 'game_master', title: t('achievements.game_master.title'), desc: t('achievements.game_master.desc'), icon: <Target size={18} /> },
+        { id: 'profile_updated', title: t('achievements.profile_updated.title'), desc: t('achievements.profile_updated.desc'), icon: <Zap size={18} /> },
     ];
 
     useEffect(() => {
         const stored = localStorage.getItem('apex_achievements');
         if (stored) setAchievements(JSON.parse(stored));
-
-        const interval = setInterval(() => {
-            // Simulated check for achievements based on user activity
-            // In a real app we'd bind this to specific events
-        }, 5000);
-        return () => clearInterval(interval);
     }, []);
 
     const unlock = (id: string) => {
@@ -38,7 +34,7 @@ export const AchievementTracker: React.FC = () => {
         <div className="space-y-6">
             <div className="flex items-center gap-3 mb-8">
                 <Award className="text-emerald-500" />
-                <h3 className="text-xl font-black italic uppercase text-white font-mono">Achievement Protocol</h3>
+                <h3 className="text-xl font-black italic uppercase text-white font-mono">{t('achievements.title')}</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -76,7 +72,7 @@ export const AchievementTracker: React.FC = () => {
                            <Award size={24} />
                         </div>
                         <div className="font-mono text-zinc-950">
-                            <h5 className="font-black text-xs uppercase tracking-tighter">Achievement Unlocked</h5>
+                            <h5 className="font-black text-xs uppercase tracking-tighter">{t('achievements.unlocked')}</h5>
                             <p className="text-[9px] font-black uppercase tracking-widest">{list.find(l => l.id === latest)?.title}</p>
                         </div>
                     </motion.div>

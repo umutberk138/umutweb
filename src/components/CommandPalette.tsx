@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Terminal, Globe, User, Shield, Hash, Zap, Command } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
 
 interface CommandPaletteProps {
   onClose: () => void;
@@ -8,15 +9,16 @@ interface CommandPaletteProps {
 }
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({ onClose, onNavigate }) => {
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const commands = [
-    { id: 'desktop', icon: <Globe size={16} />, label: 'SYSTEM_DESKTOP', action: () => onNavigate('DESKTOP') },
-    { id: 'terminal', icon: <Terminal size={16} />, label: 'COMMAND_LINE_INTERFACE', action: () => onNavigate('TERMINAL') },
-    { id: 'darknet', icon: <Shield size={16} />, label: 'SHADOW_NETWORK_UPLINK', action: () => onNavigate('DARKNET') },
-    { id: 'portfolio', icon: <Zap size={16} />, label: 'PROFESSIONAL_ARCHIVE', action: () => onNavigate('PORTFOLIO') },
-    { id: 'profile', icon: <User size={16} />, label: 'NODE_IDENTITY_PROFILE', action: () => onNavigate('PROFILE') },
+    { id: 'desktop', icon: <Globe size={16} />, label: t('commands.desktop'), action: () => onNavigate('DESKTOP') },
+    { id: 'terminal', icon: <Terminal size={16} />, label: t('commands.terminal'), action: () => onNavigate('TERMINAL') },
+    { id: 'darknet', icon: <Shield size={16} />, label: t('commands.darknet'), action: () => onNavigate('DARKNET') },
+    { id: 'portfolio', icon: <Zap size={16} />, label: t('commands.portfolio'), action: () => onNavigate('PORTFOLIO') },
+    { id: 'profile', icon: <User size={16} />, label: t('commands.profile'), action: () => onNavigate('PROFILE') },
   ];
 
   const filtered = commands.filter(c => c.label.toLowerCase().includes(query.toLowerCase()));
@@ -53,7 +55,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ onClose, onNavig
           <Search className="text-emerald-500" />
           <input 
             autoFocus
-            placeholder="ENTER COMMAND OR SEARCH RESOURCE..."
+            placeholder={t('commands.search_placeholder')}
             className="flex-1 bg-transparent border-none outline-none text-white font-mono placeholder:text-zinc-600 text-lg"
             value={query}
             onChange={e => setQuery(e.target.value)}
@@ -83,7 +85,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ onClose, onNavig
           ))}
           {filtered.length === 0 && (
             <div className="p-12 text-center text-zinc-600 font-mono text-xs uppercase tracking-widest">
-              No matching uplink protocols found.
+              {lang === 'TR' ? 'Eşleşen komut bulunamadı.' : 'No matching commands found.'}
             </div>
           )}
         </div>

@@ -3,8 +3,10 @@ import { motion } from 'motion/react';
 import { User, Shield, Hash, Save, Link as LinkIcon, Github, Linkedin, Globe, Camera } from 'lucide-react';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useI18n } from '../lib/i18n';
 
 export const Profile: React.FC = () => {
+  const { lang } = useI18n();
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -71,7 +73,7 @@ export const Profile: React.FC = () => {
       window.dispatchEvent(new Event('darknet_auth_change'));
       
       setUserData(prev => ({ ...prev, ...formData }));
-      alert('Node profiles synchronized successfully.');
+      alert(lang === 'TR' ? 'Düğüm profili başarıyla senkronize edildi.' : 'Node profiles synchronized successfully.');
     } catch (err) {
       handleFirestoreError(err, OperationType.UPDATE, 'registrations');
     } finally {
@@ -79,8 +81,8 @@ export const Profile: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="text-center p-12 font-mono text-emerald-500 animate-pulse">SYNCHRONIZING DROID...</div>;
-  if (!session) return <div className="text-center p-12 text-zinc-500 font-mono">Uplink required for profile access.</div>;
+  if (loading) return <div className="text-center p-12 font-mono text-emerald-500 animate-pulse">{lang === 'TR' ? 'DROİD SENKRONİZE EDİLİYOR...' : 'SYNCHRONIZING DROID...'}</div>;
+  if (!session) return <div className="text-center p-12 text-zinc-500 font-mono">{lang === 'TR' ? 'Profil erişimi için uplink gerekli.' : 'Uplink required for profile access.'}</div>;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
@@ -111,7 +113,7 @@ export const Profile: React.FC = () => {
 
           <div className="flex-1 text-center md:text-left space-y-4">
             <h2 className="text-5xl font-black italic uppercase tracking-tighter text-white">
-               {userData?.alias || 'Shadow Node'}
+               {userData?.alias || (lang === 'TR' ? 'Gölge Düğümü' : 'Shadow Node')}
             </h2>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
                <div className="px-4 py-1.5 bg-zinc-900 border border-white/5 rounded-xl text-[10px] font-mono font-black text-zinc-400 tracking-widest flex items-center gap-2">
@@ -129,12 +131,12 @@ export const Profile: React.FC = () => {
         <div className="space-y-6">
           <div className="bg-zinc-900/50 border border-white/5 rounded-3xl p-8 space-y-6">
             <h3 className="text-sm font-black uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-              <User size={16} /> Identity Parameters
+              <User size={16} /> {lang === 'TR' ? 'Kimlik Parametreleri' : 'Identity Parameters'}
             </h3>
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">Security Alias</label>
+                <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">{lang === 'TR' ? 'Güvenlik Takma Adı' : 'Security Alias'}</label>
                 <input 
                   type="text" 
                   value={formData.alias}
@@ -155,12 +157,12 @@ export const Profile: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">Short Bio</label>
+                <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">{lang === 'TR' ? 'Kısa Biyografi' : 'Short Bio'}</label>
                 <textarea 
                   rows={4}
                   value={formData.bio}
                   onChange={e => setFormData({ ...formData, bio: e.target.value })}
-                  placeholder="Tell the network about yourself..."
+                  placeholder={lang === 'TR' ? 'Ağa kendinden bahset...' : 'Tell the network about yourself...'}
                   className="w-full bg-black/50 border border-white/5 px-4 py-3 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm font-medium text-white transition-all resize-none"
                 />
               </div>
@@ -171,13 +173,13 @@ export const Profile: React.FC = () => {
         <div className="space-y-6">
           <div className="bg-zinc-900/50 border border-white/5 rounded-3xl p-8 space-y-6">
             <h3 className="text-sm font-black uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-              <LinkIcon size={16} /> Link Integrations
+              <LinkIcon size={16} /> {lang === 'TR' ? 'Bağlantı Entegrasyonları' : 'Link Integrations'}
             </h3>
             
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  <Github size={12} /> Github Profile
+                  <Github size={12} /> {lang === 'TR' ? 'Github Profili' : 'Github Profile'}
                 </label>
                 <input 
                   type="text" 
@@ -189,7 +191,7 @@ export const Profile: React.FC = () => {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  <Linkedin size={12} /> LinkedIn Profile
+                  <Linkedin size={12} /> {lang === 'TR' ? 'LinkedIn Profili' : 'LinkedIn Profile'}
                 </label>
                 <input 
                   type="text" 
@@ -201,7 +203,7 @@ export const Profile: React.FC = () => {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                  <Globe size={12} /> Personal Website
+                  <Globe size={12} /> {lang === 'TR' ? 'Kişisel Web Sitesi' : 'Personal Website'}
                 </label>
                 <input 
                   type="text" 
@@ -215,7 +217,7 @@ export const Profile: React.FC = () => {
 
           <div className="bg-zinc-950/50 border border-emerald-500/10 p-6 rounded-3xl space-y-4">
              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase text-zinc-600">Hardware Node Hash</span>
+                <span className="text-[10px] font-mono uppercase text-zinc-600">{lang === 'TR' ? 'Donanım Düğüm Hashi' : 'Hardware Node Hash'}</span>
                 <span className="text-[10px] font-mono text-emerald-500/60 font-black">XU-902-BIS-39</span>
              </div>
              <button 
@@ -226,7 +228,7 @@ export const Profile: React.FC = () => {
               {updating ? (
                 <div className="w-5 h-5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
               ) : (
-                <><Save size={18} /> Update Matrix Identity</>
+                <><Save size={18} /> {lang === 'TR' ? 'Matris Kimliğini Güncelle' : 'Update Matrix Identity'}</>
               )}
              </button>
           </div>
@@ -235,14 +237,14 @@ export const Profile: React.FC = () => {
 
       <div className="bg-zinc-900/50 border border-white/5 rounded-3xl p-8">
         <h3 className="text-sm font-black uppercase tracking-widest text-rose-500 flex items-center gap-2 mb-6">
-          <Shield size={16} /> Device Fingerprint (Read Only)
+          <Shield size={16} /> {lang === 'TR' ? 'Cihaz Parmak İzi (Salt Okunur)' : 'Device Fingerprint (Read Only)'}
         </h3>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
            {userData && [
-             { label: 'OS/Platform', value: userData.platform },
-             { label: 'Screen Resolution', value: userData.screen },
-             { label: 'CPU Cores', value: userData.cores },
-             { label: 'IP Address', value: userData.ip }
+             { label: lang === 'TR' ? 'İşletim Sistemi/Platform' : 'OS/Platform', value: userData.platform },
+             { label: lang === 'TR' ? 'Ekran Çözünürlüğü' : 'Screen Resolution', value: userData.screen },
+             { label: lang === 'TR' ? 'CPU Çekirdek Sayısı' : 'CPU Cores', value: userData.cores },
+             { label: lang === 'TR' ? 'IP Adresi' : 'IP Address', value: userData.ip }
            ].map((stat, i) => (
              <div key={i} className="space-y-1">
                 <span className="text-[10px] font-mono uppercase text-zinc-600 tracking-widest block">{stat.label}</span>

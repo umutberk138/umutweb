@@ -7,6 +7,7 @@ import { ToolsHub } from './ToolsHub';
 import { Terminal as TerminalIcon, ShieldCheck, ShieldX, Settings } from 'lucide-react';
 import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { useI18n } from '../lib/i18n';
 
 interface TerminalLine {
   text: string;
@@ -14,17 +15,18 @@ interface TerminalLine {
 }
 
 export const Terminal: React.FC = () => {
+  const { lang, t } = useI18n();
   const [input, setInput] = useState('');
   const [showGame, setShowGame] = useState(false);
   const [showGate, setShowGate] = useState(true);
   const [activeModule, setActiveModule] = useState<'TERMINAL' | 'GAMES' | 'CHAT' | 'TOOLS'>('TERMINAL');
 
   const [history, setHistory] = useState<TerminalLine[]>([
-    { text: 'STRATEGIC ANALYSIS v2.4 [Build 16:38:06]', type: 'output' },
-    { text: '(c) Umut Hub Corporation. Optimized Context Enabled.', type: 'output' },
+    { text: lang === 'TR' ? 'STRATEJİK ANALİZ v2.4 [Yapım 16:38:06]' : 'STRATEGIC ANALYSIS v2.4 [Build 16:38:06]', type: 'output' },
+    { text: lang === 'TR' ? '(c) Umut Hub Kurumsal. Optimize Edilmiş Bağlam Etkin.' : '(c) Umut Hub Corporation. Optimized Context Enabled.', type: 'output' },
     { text: '', type: 'output' },
-    { text: 'System identity verified:', type: 'success' },
-    { text: 'Type "help" for a list of available routines.', type: 'output' },
+    { text: lang === 'TR' ? 'Sistem kimliği doğrulandı:' : 'System identity verified:', type: 'success' },
+    { text: lang === 'TR' ? 'Kullanılabilir rutinlerin listesi için "help" yazın.' : 'Type "help" for a list of available routines.', type: 'output' },
   ]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -48,35 +50,40 @@ export const Terminal: React.FC = () => {
 
     switch (cmd) {
       case 'help':
-        newHistory.push({ text: 'Available routines: help, clear, whoami, status, games, chat, tools, optimize, broadcast [msg], leaderboard', type: 'output' });
+        newHistory.push({ 
+          text: lang === 'TR' 
+            ? 'Kullanılabilir rutinler: help, clear, whoami, status, games, chat, tools, optimize, broadcast [msg], leaderboard' 
+            : 'Available routines: help, clear, whoami, status, games, chat, tools, optimize, broadcast [msg], leaderboard', 
+          type: 'output' 
+        });
         break;
       case 'clear':
         setHistory([]);
         setInput('');
         return;
       case 'games':
-        newHistory.push({ text: 'Accessing Games Protocol...', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'Oyun Protokolüne erişiliyor...' : 'Accessing Games Protocol...', type: 'success' });
         setTimeout(() => setActiveModule('GAMES'), 500);
         break;
       case 'chat':
-        newHistory.push({ text: 'Initializing shadows room connection...', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'Gölge odası bağlantısı başlatılıyor...' : 'Initializing shadows room connection...', type: 'success' });
         setTimeout(() => setActiveModule('CHAT'), 500);
         break;
       case 'tools':
-        newHistory.push({ text: 'Mounting utility drive...', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'Yardımcı sürücü bağlanıyor...' : 'Mounting utility drive...', type: 'success' });
         setTimeout(() => setActiveModule('TOOLS'), 500);
         break;
       case 'whoami':
         if (auth.currentUser) {
            newHistory.push({ text: `ID: ${auth.currentUser.uid}`, type: 'output' });
            newHistory.push({ text: `NODE: ${auth.currentUser.displayName || auth.currentUser.email}`, type: 'output' });
-           newHistory.push({ text: 'STATUS: AUTHORIZED_NODE', type: 'success' });
+           newHistory.push({ text: lang === 'TR' ? 'DURUM: YETKİLİ_DÜĞÜM' : 'STATUS: AUTHORIZED_NODE', type: 'success' });
         } else {
-           newHistory.push({ text: 'GUEST_NODE // UNAUTHORIZED', type: 'error' });
+           newHistory.push({ text: lang === 'TR' ? 'MİSAFİR_DÜĞÜM // YETKİSİZ' : 'GUEST_NODE // UNAUTHORIZED', type: 'error' });
         }
         break;
       case 'leaderboard':
-        newHistory.push({ text: 'Querying Global Index...', type: 'output' });
+        newHistory.push({ text: lang === 'TR' ? 'Küresel İndeks Sorgulanıyor...' : 'Querying Global Index...', type: 'output' });
         try {
           const q = query(collection(db, 'users'), orderBy('highScore', 'desc'), limit(5));
           const snap = await getDocs(q);
@@ -84,16 +91,16 @@ export const Terminal: React.FC = () => {
             newHistory.push({ text: `#${idx + 1} - ${doc.id.slice(0, 8)}: ${doc.data().highScore || 0} pts`, type: 'output' });
           });
         } catch (error) {
-          newHistory.push({ text: 'Error fetching leaderboard.', type: 'error' });
+          newHistory.push({ text: lang === 'TR' ? 'Liderlik tablosu alınırken hata oluştu.' : 'Error fetching leaderboard.', type: 'error' });
         }
         break;
       case 'broadcast':
         if (!auth.currentUser) {
-          newHistory.push({ text: 'Auth required for broadcast.', type: 'error' });
+          newHistory.push({ text: lang === 'TR' ? 'Yayın için kimlik doğrulaması gerekli.' : 'Auth required for broadcast.', type: 'error' });
           break;
         }
         if (!args) {
-          newHistory.push({ text: 'Usage: broadcast [message]', type: 'error' });
+          newHistory.push({ text: lang === 'TR' ? 'Kullanım: broadcast [mesaj]' : 'Usage: broadcast [message]', type: 'error' });
           break;
         }
         try {
@@ -103,28 +110,28 @@ export const Terminal: React.FC = () => {
             timestamp: serverTimestamp(),
             isSystem: true
           });
-          newHistory.push({ text: 'Signal broadcasted to Shadows Room.', type: 'success' });
+          newHistory.push({ text: lang === 'TR' ? 'Sinyal Gölge Odasına yayınlandı.' : 'Signal broadcasted to Shadows Room.', type: 'success' });
         } catch (err) {
-          newHistory.push({ text: 'Broadcast failed.', type: 'error' });
+          newHistory.push({ text: lang === 'TR' ? 'Yayın başarısız.' : 'Broadcast failed.', type: 'error' });
         }
         break;
       case 'status':
-        newHistory.push({ text: 'CORE STABILITY: 99.98%', type: 'success' });
-        newHistory.push({ text: 'PATH EFFICIENCY: 98th Percentile', type: 'success' });
-        newHistory.push({ text: 'ALLOCATION: OPTIMIZED', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'ÇEKİRDEK STABİLİTESİ: %99.98' : 'CORE STABILITY: 99.98%', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'YOL VERİMLİLİĞİ: 98. Yüzdelik Dilim' : 'PATH EFFICIENCY: 98th Percentile', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'TAHSİS: OPTİMİZE EDİLDİ' : 'ALLOCATION: OPTIMIZED', type: 'success' });
         break;
       case 'optimize':
-        newHistory.push({ text: 'Initiating optimization sequence...', type: 'output' });
+        newHistory.push({ text: lang === 'TR' ? 'Optimizasyon dizisi başlatılıyor...' : 'Initiating optimization sequence...', type: 'output' });
         setTimeout(() => {
-          setHistory(prev => [...prev, { text: 'Done. System yield projected at +14.2%.', type: 'success' }]);
+          setHistory(prev => [...prev, { text: lang === 'TR' ? 'Tamamlandı. Sistem verimi +%14.2 olarak projekt edildi.' : 'Done. System yield projected at +14.2%.', type: 'success' }]);
         }, 800);
         break;
       case 'snake':
-        newHistory.push({ text: 'Initializing SNAKE_PROTOCOL...', type: 'success' });
+        newHistory.push({ text: lang === 'TR' ? 'YILAN_PROTOKOLÜ başlatılıyor...' : 'Initializing SNAKE_PROTOCOL...', type: 'success' });
         setTimeout(() => setShowGame(true), 500);
         break;
       default:
-        newHistory.push({ text: `routine: ${cmd}: command not found.`, type: 'error' });
+        newHistory.push({ text: `rutin: ${cmd}: komut bulunamadı.`, type: 'error' });
     }
 
     setHistory(newHistory);
@@ -144,9 +151,9 @@ export const Terminal: React.FC = () => {
         <div className="w-full md:w-48 space-y-2">
             {[
                 { id: 'TERMINAL', label: 'Terminal', icon: TerminalIcon },
-                { id: 'GAMES', label: 'Games Hub', icon: ShieldCheck },
-                { id: 'CHAT', label: 'Shadows Chat', icon: ShieldX },
-                { id: 'TOOLS', label: 'Utility Tools', icon: Settings }
+                { id: 'GAMES', label: lang === 'TR' ? 'Oyun Merkezi' : 'Games Hub', icon: ShieldCheck },
+                { id: 'CHAT', label: lang === 'TR' ? 'Gölge Sohbet' : 'Shadows Chat', icon: ShieldX },
+                { id: 'TOOLS', label: lang === 'TR' ? 'Yardımcı Araçlar' : 'Utility Tools', icon: Settings }
             ].map(m => (
                 <button 
                   key={m.id}
@@ -206,13 +213,13 @@ export const Terminal: React.FC = () => {
                     {activeModule === 'GAMES' && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full overflow-y-auto pr-2">
                              <div 
-                               onClick={() => setShowGame(true)}
-                               className="bg-zinc-900 border border-apex-border p-8 rounded-3xl flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-emerald-500/50 transition-all group shadow-xl"
+                                onClick={() => setShowGame(true)}
+                                className="bg-zinc-900 border border-apex-border p-8 rounded-3xl flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-emerald-500/50 transition-all group shadow-xl"
                              >
                                 <div className="text-5xl group-hover:scale-110 transition-transform">🐍</div>
                                 <div className="text-center">
                                     <h4 className="font-black italic uppercase tracking-tighter text-xl">SNAKE_PROTOCOL</h4>
-                                    <p className="text-[10px] text-zinc-500 font-mono">Navigate the secure path.</p>
+                                    <p className="text-[10px] text-zinc-500 font-mono">{lang === 'TR' ? 'Güvenli yolda gezin.' : 'Navigate the secure path.'}</p>
                                 </div>
                              </div>
                              
@@ -220,7 +227,7 @@ export const Terminal: React.FC = () => {
                                 <div className="text-5xl">🎯</div>
                                 <div className="text-center">
                                     <h4 className="font-black italic uppercase tracking-tighter text-xl">2048_MODULE</h4>
-                                    <p className="text-[10px] text-zinc-500 font-mono">Integration in progress...</p>
+                                    <p className="text-[10px] text-zinc-500 font-mono">{lang === 'TR' ? 'Entegrasyon devam ediyor...' : 'Integration in progress...'}</p>
                                 </div>
                              </div>
 
@@ -228,7 +235,7 @@ export const Terminal: React.FC = () => {
                                 <div className="text-5xl">🧠</div>
                                 <div className="text-center">
                                     <h4 className="font-black italic uppercase tracking-tighter text-xl">MEMORY_X</h4>
-                                    <p className="text-[10px] text-zinc-500 font-mono">Neural calibration required.</p>
+                                    <p className="text-[10px] text-zinc-500 font-mono">{lang === 'TR' ? 'Nöral kalibrasyon gerekli.' : 'Neural calibration required.'}</p>
                                 </div>
                              </div>
                         </div>

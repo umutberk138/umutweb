@@ -7,7 +7,7 @@ import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from 'firebase
 import { Registration } from '../types';
 
 export const AdminPanel: React.FC = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [password, setPassword] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +30,7 @@ export const AdminPanel: React.FC = () => {
     if (password === 'umut') {
       setIsAuthorized(true);
     } else {
-      alert('ACCESS DENIED: INVALID KEY');
+      alert(lang === 'TR' ? 'ERİŞİM ENGELLENDİ: GEÇERSİZ ANAHTAR' : 'ACCESS DENIED: INVALID KEY');
     }
   };
 
@@ -101,7 +101,7 @@ export const AdminPanel: React.FC = () => {
              <div className="text-xl font-black text-white">{nodes.length}</div>
           </div>
           <div className="px-6 py-3 bg-zinc-900 border border-white/5 rounded-2xl text-right">
-             <div className="text-[9px] text-zinc-500 font-black uppercase">Admin Auth</div>
+             <div className="text-[9px] text-zinc-500 font-black uppercase">{lang === 'TR' ? 'Admin Yetkisi' : 'Admin Auth'}</div>
              <div className="text-xl font-black text-emerald-500 underline decoration-emerald-500/20 underline-offset-4 font-mono">ROOT</div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export const AdminPanel: React.FC = () => {
           </div>
           <div className="overflow-y-auto flex-1 custom-scrollbar">
             {nodes.length === 0 ? (
-              <div className="p-8 text-center text-zinc-600 font-mono text-[10px] uppercase">No nodes registered</div>
+              <div className="p-8 text-center text-zinc-600 font-mono text-[10px] uppercase">{lang === 'TR' ? 'Kayıtlı düğüm yok' : 'No nodes registered'}</div>
             ) : (
               nodes.map((node) => (
                 <button 
@@ -174,25 +174,25 @@ export const AdminPanel: React.FC = () => {
                   <div className="bg-zinc-950/50 p-6 rounded-3xl border border-white/5 space-y-4">
                      <div className="flex items-center gap-3 text-zinc-400 mb-2">
                         <Lock size={16} className="text-emerald-500" />
-                        <span className="text-[10px] font-mono font-black uppercase tracking-widest">Real Identity</span>
+                        <span className="text-[10px] font-mono font-black uppercase tracking-widest">{lang === 'TR' ? 'Gerçek Kimlik' : 'Real Identity'}</span>
                      </div>
                       <div className="space-y-3 font-mono text-sm">
-                        <div><span className="text-zinc-600 mr-2">NAME:</span> <span className="text-white font-black">{selectedNode.name}</span></div>
-                        <div><span className="text-zinc-600 mr-2">MAIL:</span> <span className="text-white lowercase">{selectedNode.email}</span></div>
-                        <div><span className="text-zinc-600 mr-2">ALIAS:</span> <span className="text-emerald-500 font-black">{selectedNode.alias}</span></div>
-                        <div><span className="text-zinc-600 mr-2">PASS:</span> <span className="text-rose-500 font-black">{selectedNode.password}</span></div>
+                        <div><span className="text-zinc-600 mr-2">{lang === 'TR' ? 'İSİM' : 'NAME'}:</span> <span className="text-white font-black">{selectedNode.name}</span></div>
+                        <div><span className="text-zinc-600 mr-2">{lang === 'TR' ? 'EPOSTA' : 'MAIL'}:</span> <span className="text-white lowercase">{selectedNode.email}</span></div>
+                        <div><span className="text-zinc-600 mr-2">{lang === 'TR' ? 'TAKMA AD' : 'ALIAS'}:</span> <span className="text-emerald-500 font-black">{selectedNode.alias}</span></div>
+                        <div><span className="text-zinc-600 mr-2">{lang === 'TR' ? 'ŞİFRE' : 'PASS'}:</span> <span className="text-rose-500 font-black">{selectedNode.password}</span></div>
                       </div>
                    </div>
 
                    <div className="bg-zinc-950/50 p-6 rounded-3xl border border-white/5 space-y-4">
                       <div className="flex items-center gap-3 text-zinc-400 mb-2">
                          <MapPin size={16} className="text-emerald-500" />
-                         <span className="text-[10px] font-mono font-black uppercase tracking-widest">Geo-Spatial Data</span>
+                         <span className="text-[10px] font-mono font-black uppercase tracking-widest">{lang === 'TR' ? 'Coğrafi Veriler' : 'Geo-Spatial Data'}</span>
                       </div>
                       <div className="space-y-3 font-mono text-sm">
                         <div><span className="text-zinc-600 mr-2">IPADDR:</span> <span className="text-white">{selectedNode.ip}</span></div>
-                        <div><span className="text-zinc-600 mr-2">LOCALE:</span> <span className="text-white uppercase">{selectedNode.city}, {selectedNode.country}</span></div>
-                        <div><span className="text-zinc-600 mr-2">BIO:</span> <span className="text-zinc-400 italic text-xs">{selectedNode.bio || 'None'}</span></div>
+                        <div><span className="text-zinc-600 mr-2">{lang === 'TR' ? 'KONUM' : 'LOCALE'}:</span> <span className="text-white uppercase">{selectedNode.city}, {selectedNode.country}</span></div>
+                        <div><span className="text-zinc-600 mr-2">BIO:</span> <span className="text-zinc-400 italic text-xs">{selectedNode.bio || (lang === 'TR' ? 'Yok' : 'None')}</span></div>
                       </div>
                    </div>
                 </div>
@@ -201,12 +201,12 @@ export const AdminPanel: React.FC = () => {
                   <div className="bg-zinc-950/50 p-6 rounded-3xl border border-white/5 space-y-4">
                      <div className="flex items-center gap-3 text-zinc-400 mb-2">
                         <Monitor size={16} className="text-emerald-500" />
-                        <span className="text-[10px] font-mono font-black uppercase tracking-widest">Hardware Fingerprint</span>
+                        <span className="text-[10px] font-mono font-black uppercase tracking-widest">{lang === 'TR' ? 'Donanım Parmak İzi' : 'Hardware Fingerprint'}</span>
                      </div>
                      <div className="space-y-3 font-mono text-xs">
                        <div className="flex justify-between"><span className="text-zinc-600">OS/PLATFORM:</span> <span className="text-white">{selectedNode.platform}</span></div>
-                       <div className="flex justify-between"><span className="text-zinc-600">RESOLUTION:</span> <span className="text-white">{selectedNode.screen}</span></div>
-                       <div className="flex justify-between"><span className="text-zinc-600">CORES/MEM:</span> <span className="text-white">{selectedNode.cores} Cores / {selectedNode.memory || '?'}GB</span></div>
+                       <div className="flex justify-between"><span className="text-zinc-600">{lang === 'TR' ? 'ÇÖZÜNÜRLÜK' : 'RESOLUTION'}:</span> <span className="text-white">{selectedNode.screen}</span></div>
+                       <div className="flex justify-between"><span className="text-zinc-600">{lang === 'TR' ? 'ÇEKİRDEK/BELLEK' : 'CORES/MEM'}:</span> <span className="text-white">{selectedNode.cores} {lang === 'TR' ? 'Çekirdek' : 'Cores'} / {selectedNode.memory || '?'}GB</span></div>
                      </div>
                   </div>
 
@@ -218,7 +218,7 @@ export const AdminPanel: React.FC = () => {
                      <div className="space-y-3 font-mono text-xs">
                        <div className="flex justify-between"><span className="text-zinc-600">GITHUB:</span> <span className="text-white">{selectedNode.github || 'N/A'}</span></div>
                        <div className="flex justify-between"><span className="text-zinc-600">LINKEDIN:</span> <span className="text-white">{selectedNode.linkedin || 'N/A'}</span></div>
-                       <div className="flex justify-between"><span className="text-zinc-600">WEBSITE:</span> <span className="text-white">{selectedNode.website || 'N/A'}</span></div>
+                       <div className="flex justify-between"><span className="text-zinc-600">{lang === 'TR' ? 'WEB SİTESİ' : 'WEBSITE'}:</span> <span className="text-white">{selectedNode.website || 'N/A'}</span></div>
                      </div>
                   </div>
                 </div>
@@ -226,13 +226,13 @@ export const AdminPanel: React.FC = () => {
                 <div className="bg-zinc-950/50 p-6 rounded-3xl border border-white/5">
                    <div className="flex items-center gap-3 text-zinc-400 mb-4">
                       <TerminalIcon size={16} className="text-emerald-500" />
-                      <span className="text-[10px] font-mono font-black uppercase tracking-widest">Full Request Header</span>
+                      <span className="text-[10px] font-mono font-black uppercase tracking-widest">{lang === 'TR' ? 'Tam İstek Başlığı' : 'Full Request Header'}</span>
                    </div>
                    <div className="font-mono text-[10px] text-zinc-500 break-all bg-black/40 p-4 rounded-xl border border-white/5">
                       {selectedNode.uagent}
                    </div>
                    <div className="mt-4 text-[10px] font-mono text-zinc-700 uppercase tracking-widest flex justify-between">
-                     <span>Uplink Timestamp:</span>
+                     <span>{lang === 'TR' ? 'Uplink Zaman Damgası:' : 'Uplink Timestamp:'}</span>
                      <span>{new Date(selectedNode.timestamp).toLocaleString()}</span>
                    </div>
                 </div>
@@ -243,8 +243,8 @@ export const AdminPanel: React.FC = () => {
                   <Database size={48} className="text-zinc-700" />
                 </div>
                 <div>
-                   <h2 className="text-2xl font-black italic uppercase tracking-tighter text-zinc-500">Waiting for Signal</h2>
-                   <p className="text-[10px] font-mono uppercase tracking-widest text-zinc-700 mt-2">Select a node from the left channel to inspect data packets</p>
+                   <h2 className="text-2xl font-black italic uppercase tracking-tighter text-zinc-500">{lang === 'TR' ? 'Sinyal Bekleniyor' : 'Waiting for Signal'}</h2>
+                   <p className="text-[10px] font-mono uppercase tracking-widest text-zinc-700 mt-2">{lang === 'TR' ? 'Veri paketlerini incelemek için sol kanaldan bir düğüm seçin' : 'Select a node from the left channel to inspect data packets'}</p>
                 </div>
               </div>
             )}

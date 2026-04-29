@@ -111,6 +111,88 @@ const translations = {
       nodes_title: "Kayıtlı Düğümler",
       node_profile: "Düğüm Profili",
       delete_confirm: "PROTOKOL_SIL: Düğüm sonlandırılsın mı?"
+    },
+    commands: {
+      search_placeholder: "KOMUT GİRİN VEYA KAYNAK ARAYIN...",
+      desktop: "SİSTEM_MASAÜSTÜ",
+      terminal: "KOMUT_SATIRI_ARAYÜZÜ",
+      darknet: "GÖLGE_AĞ_BAĞLANTISI",
+      portfolio: "PROFESYONEL_ARŞİV",
+      profile: "DÜĞÜM_KİMLİK_PROFİLİ"
+    },
+    widgets: {
+      market_stable: "DÜĞÜM_STABİL",
+      binary_clock: "İKİLİ_SAAT",
+      storage_usage: "APEX_DEPOLAMA: %{usage} DOLU",
+      total_items: "%{count} TOPLAM ÖĞE"
+    },
+    tools: {
+      cipher: "ŞİFRE",
+      health: "SAĞLIK",
+      awards: "ÖDÜLLER",
+      pad: "NOTLAR",
+      encrypt: "Şifrele",
+      decrypt: "Şifre Çöz",
+      input_placeholder: "İŞLENECEK_VERİYİ_GİRİN...",
+      execute: "Protokolü Çalıştır",
+      result: "İşlem Sonucu",
+      warning_base64: "Uyarı: Base64 protokolleri hafiftir. Seviye 5 veriler için nöral şifreleme kullanın.",
+      cpu: "İşlemci Kullanımı",
+      ram: "Bellek Taahhüdü",
+      temp: "SICAKLIK"
+    },
+    achievements: {
+      title: "Başarım Protokolü",
+      unlocked: "Başarım Kilidi Açıldı",
+      first_login: { title: "DÜĞÜM_KEŞFİ", desc: "Gölge Ağ'a güvenli erişim sağlandı." },
+      cli_user: { title: "CLI_OPERATÖRÜ", desc: "Terminal arayüzü kullanıldı." },
+      game_master: { title: "NÖRAL_REFLEKS", desc: "Yılan protokolü oynandı." },
+      profile_updated: { title: "KİMLİK_SENKRONİZASYONU", desc: "Düğüm biyografisi güncellendi." }
+    },
+    ambient: {
+      active: "Ortam_Katmanı_Aktif",
+      dormant: "Akustik_Uyku_Modu",
+      track: "SİBER_NOIR_MİX_4.MP3"
+    },
+    file_explorer: {
+      home: "EV",
+      projects: "PROJELER",
+      identities: "KİMLİKLER",
+      logs: "BAĞLANTI_GÜNLÜKLERİ.TXT",
+      key: "GÖLGE_ANAHTAR.ÖZEL",
+      strategy: "AMAZON_STRATEJİSİ.PDF",
+      node_sys: "KAPADOKYA_DÜĞÜMÜ.SYS"
+    },
+    dashboard: {
+      performance: "PERFORMANS_TAKİBİ",
+      optimization: "Sistem Optimizasyonu Devam Ediyor",
+      live_visitors: "Canlı Ziyaretçiler",
+      active_sessions: "Aktif Oturumlar",
+      chat_volume: "Sohbet Hacmi",
+      messages_processed: "İşlenen Mesajlar",
+      peak_score: "En Yüksek Skor",
+      global_high_score: "Küresel Rekor",
+      stability_index: "Stabilite Endeksi",
+      system_health: "Sistem Sağlığı",
+      throughput: "Ağ Verimi",
+      traffic: "Gerçek Zamanlı Trafik",
+      live_node: "Canlı Düğüm",
+      metrics: "Sistem Metrikleri",
+      cpu_load: "CPU Yükü",
+      memory: "Bellek",
+      firewall: "Güvenlik Duvarı",
+      latency: "Ağ Gecikmesi",
+      kernel_status: "Canlı Çekirdek Durumu",
+      reset: "Donanımsal Sıfırlama",
+      nodes_title: "Yetkili Düğümler",
+      node_id: "Düğüm Kimliği",
+      last_active: "Son Aktif",
+      state: "Durum",
+      modules: "Sistem Modülleri",
+      preferences: "Hızlı Tercihler",
+      auto_opt: "Otomatik Optimizasyon",
+      matrix_bg: "Matris Arka Plan Etkisi",
+      logging: "Oturum Günlüğü"
     }
   },
   EN: {
@@ -221,6 +303,88 @@ const translations = {
       nodes_title: "Registered Nodes",
       node_profile: "Node Profile",
       delete_confirm: "PROTOCOL_DELETE: Confirm node termination?"
+    },
+    commands: {
+      search_placeholder: "ENTER COMMAND OR SEARCH RESOURCE...",
+      desktop: "SYSTEM_DESKTOP",
+      terminal: "COMMAND_LINE_INTERFACE",
+      darknet: "SHADOW_NETWORK_UPLINK",
+      portfolio: "PROFESSIONAL_ARCHIVE",
+      profile: "NODE_IDENTITY_PROFILE"
+    },
+    widgets: {
+      market_stable: "NODE_STABLE",
+      binary_clock: "BINARY_CLOCK",
+      storage_usage: "APEX_STORAGE: %{usage} FULL",
+      total_items: "%{count} ITEMS TOTAL"
+    },
+    tools: {
+      cipher: "CIPHER",
+      health: "HEALTH",
+      awards: "AWARDS",
+      pad: "PAD",
+      encrypt: "Encrypt",
+      decrypt: "Decrypt",
+      input_placeholder: "ENTER_DATA_TO_PROCESS...",
+      execute: "Execute Protocol",
+      result: "Processed Result",
+      warning_base64: "Warning: Base64 protocols are lightweight. Use neural encryption for level 5 data.",
+      cpu: "CPU Utilization",
+      ram: "Memory Commit",
+      temp: "TEMP"
+    },
+    achievements: {
+      title: "Achievement Protocol",
+      unlocked: "Achievement Unlocked",
+      first_login: { title: "NODE_DISCOVERY", desc: "Securely accessed the Shadow Network." },
+      cli_user: { title: "CLI_OPERATOR", desc: "Used the terminal interface." },
+      game_master: { title: "NEURAL_REFLEX", desc: "Played the Snake protocol." },
+      profile_updated: { title: "IDENTITY_SYNC", desc: "Modified node bio." }
+    },
+    ambient: {
+      active: "Ambient_Layer_Active",
+      dormant: "Acoustic_Dormant",
+      track: "CYBER_NOIR_MIX_4.MP3"
+    },
+    file_explorer: {
+      home: "HOME",
+      projects: "PROJECTS",
+      identities: "IDENTITIES",
+      logs: "UPLINK_LOGS.TXT",
+      key: "SHADOW_KEY.PRIVATE",
+      strategy: "AMAZON_STRATEJİSİ.PDF",
+      node_sys: "CAPPADOCIA_NODE.SYS"
+    },
+    dashboard: {
+      performance: "PERFORMANCE_TRACKING",
+      optimization: "System Optimization In Progress",
+      live_visitors: "Live Visitors",
+      active_sessions: "Active Sessions",
+      chat_volume: "Chat Volume",
+      messages_processed: "Messages Processed",
+      peak_score: "Peak Score",
+      global_high_score: "Global High Score",
+      stability_index: "Stability Index",
+      system_health: "System Health",
+      throughput: "Network Throughput",
+      traffic: "Real-time Traffic",
+      live_node: "Live Node",
+      metrics: "System Metrics",
+      cpu_load: "CPU Load",
+      memory: "Memory",
+      firewall: "Security Firewall",
+      latency: "Network Latency",
+      kernel_status: "Live Kernel Status",
+      reset: "Hardened Reset",
+      nodes_title: "Authorized Nodes",
+      node_id: "Node ID",
+      last_active: "Last Active",
+      state: "State",
+      modules: "System Modules",
+      preferences: "Quick Preferences",
+      auto_opt: "Automatic Optimization",
+      matrix_bg: "Matrix Background Effect",
+      logging: "Session Logging"
     }
   }
 };

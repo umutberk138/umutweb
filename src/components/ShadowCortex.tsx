@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Terminal as TerminalIcon, Sparkles, Send } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
+import { useI18n } from '../lib/i18n';
 
 interface Message {
   role: 'user' | 'ai';
@@ -8,9 +9,15 @@ interface Message {
 }
 
 export const ShadowCortex: React.FC = () => {
+  const { lang } = useI18n();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'ai', text: 'CORTEX NODE_001 ONLINE. STATUS: OMNISCIENT. HOW CAN I ASSIST YOUR BREACH?' }
+    { 
+      role: 'ai', 
+      text: lang === 'TR' 
+        ? 'CORTEX DÜĞÜM_001 ÇEVRİMİÇİ. DURUM: HER ŞEYİ BİLEN. İHLALİNİZE NASIL YARDIMCI OLABİLİRİM?' 
+        : 'CORTEX NODE_001 ONLINE. STATUS: OMNISCIENT. HOW CAN I ASSIST YOUR BREACH?' 
+    }
   ]);
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -32,20 +39,24 @@ export const ShadowCortex: React.FC = () => {
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
+      const systemPrompt = lang === 'TR'
+        ? `Sen CORTEX adında bir Gölge Ağı (Shadow Network) Yapay Zekasısın. Gizemli, hacker tarzı, fütüristik bir tonda konuşuyorsun. Düğümler, protokoller, ihlaller ve matris gibi terimler kullanıyorsun. Cevaplarını kısa tut. Soru: ${userMsg}`
+        : `You are a Shadow Network AI called CORTEX. You talk in a mysterious, hacker-style, futuristic tone. Use terms like nodes, protocols, breaches, and matrix. Keep answers concise. Question: ${userMsg}`;
+
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: [
           {
             role: "user",
-            parts: [{ text: `You are a Shadow Network AI called CORTEX. You talk in a mysterious, hacker-style, futuristic tone. Use terms like nodes, protocols, breaches, and matrix. Keep answers concise. Question: ${userMsg}` }]
+            parts: [{ text: systemPrompt }]
           }
         ],
       });
 
-      setMessages(prev => [...prev, { role: 'ai', text: response.text || '... COMMUNICATION TERMINATED ...' }]);
+      setMessages(prev => [...prev, { role: 'ai', text: response.text || (lang === 'TR' ? '... İLETİŞİM SONLANDIRILDI ...' : '... COMMUNICATION TERMINATED ...') }]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { role: 'ai', text: 'PROTOCOL ERROR: UNABLE TO REACH CORTEX NODE.' }]);
+      setMessages(prev => [...prev, { role: 'ai', text: lang === 'TR' ? 'PROTOKOL HATASI: CORTEX DÜĞÜMÜNE ULAŞILAMIYOR.' : 'PROTOCOL ERROR: UNABLE TO REACH CORTEX NODE.' }]);
     } finally {
       setLoading(false);
     }
@@ -56,7 +67,7 @@ export const ShadowCortex: React.FC = () => {
       <div className="p-6 border-b border-white/5 flex items-center justify-between bg-zinc-900/30">
         <div className="flex items-center gap-3 text-emerald-500">
            <Sparkles size={20} className="animate-pulse" />
-           <span className="text-xs font-black uppercase tracking-[0.4em]">CORTEX_AI_CORE</span>
+           <span className="text-xs font-black uppercase tracking-[0.4em]">{lang === 'TR' ? 'CORTEX_YZ_ÇEKİRDEĞİ' : 'CORTEX_AI_CORE'}</span>
         </div>
         <div className="flex gap-1">
            {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-emerald-500/20" />)}
@@ -73,7 +84,7 @@ export const ShadowCortex: React.FC = () => {
             }`}>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`text-[10px] font-black uppercase tracking-widest ${msg.role === 'user' ? 'text-emerald-500' : 'text-zinc-500'}`}>
-                  {msg.role === 'user' ? 'LOCAL_NODE' : 'CORTEX'}
+                  {msg.role === 'user' ? (lang === 'TR' ? 'YEREL_DÜĞÜM' : 'LOCAL_NODE') : 'CORTEX'}
                 </span>
               </div>
               <p className="text-sm leading-relaxed">{msg.text}</p>
@@ -83,7 +94,7 @@ export const ShadowCortex: React.FC = () => {
         {loading && (
           <div className="flex justify-start animate-pulse">
             <div className="bg-zinc-900/80 border border-white/5 p-4 rounded-2xl text-zinc-500 text-xs italic">
-              Accessing Cortex Logic Gates...
+              {lang === 'TR' ? 'Cortex Mantık Kapılarına Erişiliyor...' : 'Accessing Cortex Logic Gates...'}
             </div>
           </div>
         )}
@@ -95,7 +106,7 @@ export const ShadowCortex: React.FC = () => {
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder="Transmit command to Cortex..."
+            placeholder={lang === 'TR' ? 'Komutu Cortex\'e ilet...' : 'Transmit command to Cortex...'}
             className="w-full bg-black border border-white/5 p-4 pl-12 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm font-bold text-emerald-500 transition-all"
           />
           <TerminalIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" />

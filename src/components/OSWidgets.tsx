@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, TrendingDown, Clock, Globe } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
 
 export const MarketTicker: React.FC = () => {
+  const { t } = useI18n();
   const [data, setData] = useState([
     { symbol: 'AMZN', price: '189.50', change: '+1.2%', up: true },
     { symbol: 'BTC', price: '64,212', change: '-0.8%', up: false },
     { symbol: 'ETH', price: '3,124', change: '+2.4%', up: true },
-    { symbol: 'YBS_CAPP', price: 'NODE_STABLE', change: '0.0%', up: true },
+    { symbol: 'YBS_CAPP', price: t('widgets.market_stable'), change: '0.0%', up: true },
   ]);
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export const MarketTicker: React.FC = () => {
       })));
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [t]);
 
   return (
     <div className="flex gap-4 overflow-hidden py-2 select-none">
@@ -26,7 +28,7 @@ export const MarketTicker: React.FC = () => {
         {[...data, ...data].map((item, i) => (
           <div key={i} className="flex items-center gap-3 bg-zinc-950/80 px-4 py-2 rounded-xl border border-white/5 font-mono">
             <span className="text-[10px] font-black text-white">{item.symbol}</span>
-            <span className="text-[10px] text-zinc-400">${item.price}</span>
+            <span className="text-[10px] text-zinc-400">{item.symbol === 'YBS_CAPP' ? '' : '$'}{item.price}</span>
             <div className={`flex items-center gap-1 text-[9px] font-black ${item.up ? 'text-emerald-500' : 'text-rose-500'}`}>
                {item.up ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                {item.change}
@@ -39,6 +41,7 @@ export const MarketTicker: React.FC = () => {
 };
 
 export const BinaryClock: React.FC = () => {
+  const { t } = useI18n();
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -52,7 +55,7 @@ export const BinaryClock: React.FC = () => {
     <div className="flex gap-4 items-center bg-zinc-950/50 p-4 rounded-2xl border border-white/5">
       <div className="flex flex-col gap-2">
         <Clock size={16} className="text-emerald-500" />
-        <span className="text-[10px] font-mono text-zinc-500">BIN_SYS</span>
+        <span className="text-[10px] font-mono text-zinc-500">{t('widgets.binary_clock')}</span>
       </div>
       <div className="flex gap-4">
         {[time.getHours(), time.getMinutes(), time.getSeconds()].map((val, idx) => (

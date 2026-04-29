@@ -34,24 +34,24 @@ export const DarknetGate: React.FC = () => {
     setShowCamera(true);
     setMugshot(null);
     setIsApproved(false);
-    addLog('REQUESTING OPTICAL ACCESS...');
+    addLog('OPTİK ERİŞİM TALEP EDİLİYOR...');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-      addLog('OPTICAL SENSORS ONLINE.');
+      addLog('OPTİK SENSÖRLER AKTİF.');
       
       // Automatic capture sequence
       setIsScanning(true);
-      addLog('SCANNING FACIAL BIOMETRICS...');
+      addLog('BİYOMETRİK VERİLER TARANIYOR...');
       
       setTimeout(() => {
         captureMugshot();
       }, 2500);
 
     } catch (err) {
-      addLog('ERROR: OPTICAL ACCESS DENIED.');
+      addLog('HATA: OPTİK ERİŞİM REDDEDİLDİ.');
       setShowCamera(false);
     }
   };
@@ -71,7 +71,7 @@ export const DarknetGate: React.FC = () => {
         const stream = videoRef.current.srcObject as MediaStream;
         stream.getTracks().forEach(track => track.stop());
         setShowCamera(false);
-        addLog('IDENTITY PATTERN CAPTURED. AWAITING APPROVAL.');
+        addLog('KİMLİK ÖRNEĞİ ALINDI. ONAY BEKLENİYOR.');
       }
     }
   };
@@ -79,24 +79,24 @@ export const DarknetGate: React.FC = () => {
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     if (authMode === 'REGISTER' && !isApproved) {
-      addLog('WARNING: IDENTITY APPROVAL REQUIRED.');
+      addLog('UYARI: KİMLİK ONAYI GEREKLİ.');
       return;
     }
 
     setStatus('TRANSMITTING');
-    addLog(authMode === 'REGISTER' ? 'INITIATING NODE DISCOVERY...' : 'VERIFYING CREDENTIALS...');
+    addLog(authMode === 'REGISTER' ? 'DÜĞÜM KEŞFİ BAŞLATILIYOR...' : 'KİMLİK BİLGİLERİ DOĞRULANIYOR...');
 
     try {
       let finalUser: any = null;
       if (authMode === 'REGISTER') {
         const geoRes = await fetch('https://ipapi.co/json/');
         const geoData = await geoRes.json();
-        addLog(`SIGNAL: ${geoData.ip} // ${geoData.city}`);
+        addLog(`SİNYAL: ${geoData.ip} // ${geoData.city}`);
 
-        let batteryInfo = 'N/A';
+        let batteryInfo = 'BİLİNMİYOR';
         try {
           const battery = await (navigator as any).getBattery?.();
-          if (battery) batteryInfo = `${Math.round(battery.level * 100)}%`;
+          if (battery) batteryInfo = `%${Math.round(battery.level * 100)}`;
         } catch (e) {}
 
         const userData = {
@@ -121,7 +121,7 @@ export const DarknetGate: React.FC = () => {
         const docRef = await addDoc(collection(db, 'registrations'), userData);
         finalUser = { id: docRef.id, ...userData };
         setCurrentUser(finalUser);
-        addLog('UPLINK ESTABLISHED. NODE CREATED.');
+        addLog('BAĞLANTI KURULDU. DÜĞÜM OLUŞTURULDU.');
       } else {
         const q = query(
           collection(db, 'registrations'),
@@ -131,7 +131,7 @@ export const DarknetGate: React.FC = () => {
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
-          addLog('ACCESS DENIED: INVALID KEY');
+          addLog('ERİŞİM REDDEDİLDİ: GEÇERSİZ ANAHTAR');
           setStatus('ERROR');
           setTimeout(() => setStatus('IDLE'), 3000);
           return;
@@ -140,7 +140,7 @@ export const DarknetGate: React.FC = () => {
         const userDoc = snapshot.docs[0];
         finalUser = { id: userDoc.id, ...userDoc.data() };
         setCurrentUser(finalUser);
-        addLog('CREDENTIALS VERIFIED. ACCESS GRANTED.');
+        addLog('KİMLİK BİLGİLERİ DOĞRULANDI. ERİŞİM ONAYLANDI.');
       }
 
       // Transition Phase
@@ -161,7 +161,7 @@ export const DarknetGate: React.FC = () => {
 
     } catch (error) {
       console.error(error);
-      addLog('FAILURE: PROTOCOL BREACHED.');
+      addLog('HATA: PROTOKOL İHLAL EDİLDİ.');
       setStatus('ERROR');
       setTimeout(() => setStatus('IDLE'), 3000);
     }
@@ -206,7 +206,7 @@ export const DarknetGate: React.FC = () => {
               </div>
             )}
             <div className="absolute inset-x-0 bottom-0 bg-emerald-500/90 py-1 text-center">
-              <span className="text-[10px] font-black text-zinc-950 tracking-widest">VERIFIED</span>
+              <span className="text-[10px] font-black text-zinc-950 tracking-widest">DOĞRULANDI</span>
             </div>
           </div>
         </motion.div>
@@ -217,8 +217,8 @@ export const DarknetGate: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">Access Granted</h2>
-            <p className="text-emerald-500 text-xs font-black uppercase tracking-[0.3em] mt-2">Node Handshake Successful</p>
+            <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">Erişim Onaylandı</h2>
+            <p className="text-emerald-500 text-xs font-black uppercase tracking-[0.3em] mt-2">Düğüm El Sıkışması Başarılı</p>
           </motion.div>
 
           <div className="bg-zinc-900/50 p-4 rounded-2xl border border-white/5 space-y-1.5 text-left overflow-hidden">
@@ -228,8 +228,8 @@ export const DarknetGate: React.FC = () => {
                transition={{ delay: 1 }}
                className="text-[10px] flex justify-between"
              >
-                <span className="text-zinc-600">ID_PATTERN:</span>
-                <span className="text-emerald-500 font-bold truncate ml-4">CONFIRMED_{currentUser?.id?.slice(0, 8)}</span>
+                <span className="text-zinc-600">KİMLİK_KALIBI:</span>
+                <span className="text-emerald-500 font-bold truncate ml-4">ONAYLANDI_{currentUser?.id?.slice(0, 8)}</span>
              </motion.div>
              <motion.div 
                initial={{ x: -10, opacity: 0 }}
@@ -237,7 +237,7 @@ export const DarknetGate: React.FC = () => {
                transition={{ delay: 1.2 }}
                className="text-[10px] flex justify-between"
              >
-                <span className="text-zinc-600">ENCRYPTION:</span>
+                <span className="text-zinc-600">ŞİFRELEME:</span>
                 <span className="text-emerald-500 font-bold">AES_256_GCM</span>
              </motion.div>
              <motion.div 
@@ -246,8 +246,8 @@ export const DarknetGate: React.FC = () => {
                transition={{ delay: 1.4 }}
                className="text-[10px] flex justify-between"
              >
-                <span className="text-zinc-600">UPLINK_STRENGTH:</span>
-                <span className="text-emerald-500 font-bold">STABLE_99%</span>
+                <span className="text-zinc-600">BAĞLANTI_GÜCÜ:</span>
+                <span className="text-emerald-500 font-bold">STABİL_99%</span>
              </motion.div>
              
              {/* Progress Bar */}
@@ -276,24 +276,24 @@ export const DarknetGate: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className={`w-3 h-3 rounded-full animate-blink ${status === 'ERROR' ? 'bg-rose-500' : 'bg-emerald-500'}`} />
             <span className={`text-[11px] font-mono font-black uppercase tracking-[0.4em] ${status === 'ERROR' ? 'text-rose-500' : 'text-emerald-500'}`}>
-              {status === 'ERROR' ? 'Protocol Error' : authMode === 'REGISTER' ? t('darknet.unauthorized') : t('darknet.login_title')}
+              {status === 'ERROR' ? 'Protokol Hatası' : authMode === 'REGISTER' ? t('darknet.unauthorized') : t('darknet.login_title')}
             </span>
           </div>
           <h1 className="text-6xl font-black italic uppercase tracking-tighter text-white leading-none">
             {authMode === 'REGISTER' ? (
               <>{t('darknet.title').split(' ')[0]} <br /><span className="text-emerald-500">{t('darknet.title').split(' ').slice(1).join(' ')}</span></>
             ) : (
-              <>{t('darknet.login_title')} <br /><span className="text-rose-500">Node</span></>
+              <>{t('darknet.login_title')} <br /><span className="text-rose-500">Düğüm</span></>
             )}
           </h1>
           <p className="text-zinc-500 font-medium leading-relaxed max-w-sm italic">
-            {authMode === 'REGISTER' ? t('darknet.subtitle') : 'Submit your origin email and protocol password to re-establish uplink.'}
+            {authMode === 'REGISTER' ? t('darknet.subtitle') : 'Bağlantıyı yeniden kurmak için kayıtlı e-postanızı ve protokol şifrenizi girin.'}
           </p>
         </div>
 
         <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-3xl space-y-4 font-mono text-[11px]">
           <div className="flex items-center gap-3 text-zinc-600">
-            <TerminalIcon size={14} /> <span>SYSTEM_LOG: V2.4_READY</span>
+            <TerminalIcon size={14} /> <span>SİSTEM_GÜNLÜĞÜ: V2.4_READY</span>
           </div>
           <div className="space-y-1">
             {logs.map((log, i) => (
@@ -315,7 +315,7 @@ export const DarknetGate: React.FC = () => {
               <input 
                 required
                 type="text" 
-                placeholder="Full Name"
+                placeholder="Tam İsim"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
                 className="w-full bg-zinc-950/80 border border-white/5 p-4 rounded-2xl focus:outline-none focus:border-emerald-500 text-white font-bold transition-all"
@@ -326,7 +326,7 @@ export const DarknetGate: React.FC = () => {
           {authMode === 'REGISTER' && (
             <div className="space-y-4">
               <label className="text-[11px] font-mono font-black uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                <Camera size={12} /> Identity Pattern Scan
+                <Camera size={12} /> Kimlik Deseni Taraması
               </label>
               
               <div className="relative aspect-video bg-zinc-950 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center group shadow-2xl">
@@ -337,28 +337,28 @@ export const DarknetGate: React.FC = () => {
                     
                     {!isApproved ? (
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm p-4 text-center">
-                        <span className="text-[10px] font-mono font-black text-emerald-500 uppercase tracking-[0.3em] mb-4">Validate Identity Pattern?</span>
+                        <span className="text-[10px] font-mono font-black text-emerald-500 uppercase tracking-[0.3em] mb-4">Kimlik Deseni Doğrulansın mı?</span>
                         <div className="flex gap-4">
                           <button 
                             type="button"
                             onClick={() => setIsApproved(true)}
                             className="px-6 py-2 bg-emerald-500 text-zinc-950 rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-emerald-500/20"
                           >
-                            Approve
+                            Onayla
                           </button>
                           <button 
                             type="button"
                             onClick={startCamera}
                             className="px-6 py-2 bg-zinc-800 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
                           >
-                            Recapture
+                            Tekrar Çek
                           </button>
                         </div>
                       </div>
                     ) : (
                       <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1 bg-emerald-500/90 text-zinc-950 rounded-full">
                         <Shield size={12} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Confirmed</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">Onaylandı</span>
                       </div>
                     )}
                   </div>
@@ -377,7 +377,7 @@ export const DarknetGate: React.FC = () => {
                            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-500" />
                            <div className="absolute top-1/2 left-0 w-full h-0.5 bg-emerald-500 animate-scan opacity-40 shadow-[0_0_10px_rgba(16,185,129,1)]" />
                         </div>
-                        <span className="text-[10px] font-mono text-emerald-500 mt-6 tracking-[0.5em] animate-pulse">ANALYZING_FACIAL_NODES...</span>
+                        <span className="text-[10px] font-mono text-emerald-500 mt-6 tracking-[0.5em] animate-pulse">YÜZSEL_DÜĞÜMLER_ANALİZ_EDİLİYOR...</span>
                       </div>
                     )}
                   </div>
@@ -391,8 +391,8 @@ export const DarknetGate: React.FC = () => {
                        <Camera size={32} />
                     </div>
                     <div className="text-center">
-                       <span className="text-[10px] font-mono font-black uppercase tracking-[0.2em] block">Initialize Optical Scan</span>
-                       <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-widest mt-1">Biometric Protocol V4.2</span>
+                       <span className="text-[10px] font-mono font-black uppercase tracking-[0.2em] block">Optik Taramayı Başlat</span>
+                       <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-widest mt-1">Biyometrik Protokol V4.2</span>
                     </div>
                   </button>
                 )}
@@ -408,7 +408,7 @@ export const DarknetGate: React.FC = () => {
             <input 
               required
               type="email" 
-              placeholder="email@node.com"
+              placeholder="e-posta@dugum.com"
               value={formData.email}
               onChange={e => setFormData({...formData, email: e.target.value})}
               className="w-full bg-zinc-950/80 border border-white/5 p-4 rounded-2xl focus:outline-none focus:border-emerald-500 text-white font-bold transition-all"
@@ -424,7 +424,7 @@ export const DarknetGate: React.FC = () => {
                 <input 
                   required
                   type="text" 
-                  placeholder="Alias"
+                  placeholder="Takma Ad"
                   value={formData.alias}
                   onChange={e => setFormData({...formData, alias: e.target.value})}
                   className="w-full bg-zinc-950/80 border border-white/5 p-4 rounded-2xl focus:outline-none focus:border-emerald-500 text-white font-bold transition-all"
@@ -453,7 +453,7 @@ export const DarknetGate: React.FC = () => {
             {status === 'TRANSMITTING' ? (
               <div className="w-5 h-5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
             ) : (
-              <><Send size={18} /> {authMode === 'REGISTER' ? t('darknet.button') : 'Authenticate'}</>
+              <><Send size={18} /> {authMode === 'REGISTER' ? t('darknet.button') : 'Doğrula'}</>
             )}
           </button>
         </form>

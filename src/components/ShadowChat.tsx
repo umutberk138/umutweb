@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Send, User } from 'lucide-react';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { useI18n } from '../lib/i18n';
 
 interface ChatMessage {
   id: string;
@@ -12,6 +13,7 @@ interface ChatMessage {
 }
 
 export const ShadowChat: React.FC<{ userAlias: string }> = ({ userAlias }) => {
+  const { lang } = useI18n();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,7 +52,7 @@ export const ShadowChat: React.FC<{ userAlias: string }> = ({ userAlias }) => {
     setLoading(true);
     try {
       await addDoc(collection(db, 'shadow_chat'), {
-        alias: userAlias || 'Anonymous',
+        alias: userAlias || (lang === 'TR' ? 'Anonim' : 'Anonymous'),
         text: input,
         timestamp: serverTimestamp()
       });
@@ -67,9 +69,9 @@ export const ShadowChat: React.FC<{ userAlias: string }> = ({ userAlias }) => {
       <div className="p-6 border-b border-white/5 flex items-center justify-between bg-zinc-900/30">
         <div className="flex items-center gap-3 text-blue-500">
            <MessageSquare size={20} />
-           <span className="text-xs font-black uppercase tracking-[0.4em]">SHADOW_CHAT_FEED</span>
+           <span className="text-xs font-black uppercase tracking-[0.4em]">{lang === 'TR' ? 'GÖLGE_SOHBET_AKIŞI' : 'SHADOW_CHAT_FEED'}</span>
         </div>
-        <span className="text-[9px] font-bold text-zinc-500 bg-zinc-800 px-2 py-1 rounded">ENCRYPTED_SSL_V3</span>
+        <span className="text-[9px] font-bold text-zinc-500 bg-zinc-800 px-2 py-1 rounded">{lang === 'TR' ? 'ŞİFRELENMİŞ_SSL_V3' : 'ENCRYPTED_SSL_V3'}</span>
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar">
@@ -101,7 +103,7 @@ export const ShadowChat: React.FC<{ userAlias: string }> = ({ userAlias }) => {
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder="Broadcast to the network..."
+            placeholder={lang === 'TR' ? 'Ağa yayın yap...' : 'Broadcast to the network...'}
             className="w-full bg-black border border-white/5 p-4 pr-12 rounded-2xl focus:outline-none focus:border-blue-500 text-sm font-bold text-white transition-all placeholder:text-zinc-700"
           />
           <button 

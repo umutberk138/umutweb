@@ -18,6 +18,15 @@ export const DarknetDashboard: React.FC<DarknetDashboardProps> = ({ alias }) => 
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'HOME' | 'GAMES' | 'CHAT' | 'CORTEX' | 'STORAGE' | 'AWARDS'>('HOME');
 
+  const tabLabels: Record<string, string> = {
+    HOME: lang === 'TR' ? 'ANA SAYFA' : 'HOME',
+    GAMES: lang === 'TR' ? 'OYUNLAR' : 'GAMES',
+    CHAT: lang === 'TR' ? 'SOHBET' : 'CHAT',
+    CORTEX: lang === 'TR' ? 'KORTEKS' : 'CORTEX',
+    STORAGE: lang === 'TR' ? 'DEPOLAMA' : 'STORAGE',
+    AWARDS: lang === 'TR' ? 'BAŞARILAR' : 'AWARDS',
+  };
+
   return (
     <div className="h-full flex flex-col space-y-8 animate-in fade-in duration-1000">
       <header className="flex justify-between items-center bg-zinc-950/50 p-6 rounded-3xl border border-white/5">
@@ -41,7 +50,7 @@ export const DarknetDashboard: React.FC<DarknetDashboardProps> = ({ alias }) => 
                 : 'bg-zinc-900 text-zinc-500 hover:text-white'
               }`}
             >
-              {tab}
+              {tabLabels[tab]}
             </button>
           ))}
         </div>
@@ -78,11 +87,11 @@ export const DarknetDashboard: React.FC<DarknetDashboardProps> = ({ alias }) => 
               <div className="col-span-full glass-panel p-10 rounded-[40px] border border-white/5 space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-black italic uppercase text-emerald-500 flex items-center gap-3">
-                    <Activity size={20} /> Real-time Node Pulsar
+                    <Activity size={20} /> {lang === 'TR' ? 'Gerçek Zamanlı Düğüm Atışı' : 'Real-time Node Pulsar'}
                   </h3>
                   <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] font-mono font-black text-zinc-500">LIVE_DATA_STREAM</span>
+                    <span className="text-[10px] font-mono font-black text-zinc-500">{lang === 'TR' ? 'CANLI_VERİ_AKIŞI' : 'LIVE_DATA_STREAM'}</span>
                   </div>
                 </div>
                 

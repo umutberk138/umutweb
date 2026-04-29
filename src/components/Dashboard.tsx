@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { useI18n } from '../lib/i18n';
 import { 
   Users, 
   MessageSquare, 
@@ -9,7 +10,8 @@ import {
   Settings,
   Server,
   TrendingUp,
-  Zap
+  Zap,
+  Shield
 } from 'lucide-react';
 import { VisitorStat, ActivityLog } from '../types';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
@@ -27,6 +29,7 @@ import {
 import { MarketTicker, BinaryClock } from './OSWidgets';
 
 export const Dashboard: React.FC = () => {
+  const { t, lang } = useI18n();
   const [visitors, setVisitors] = useState<number>(7);
   const [statsData, setStatsData] = useState({
     messages: 0,
@@ -84,7 +87,6 @@ export const Dashboard: React.FC = () => {
   const [nodes, setNodes] = useState<any[]>([]);
 
   useEffect(() => {
-    // ... previous listeners ...
     const qRecentUsers = query(collection(db, 'users'), orderBy('lastSeen', 'desc'), limit(5));
     const unsubRecent = onSnapshot(qRecentUsers, (snap) => {
       setNodes(snap.docs.map(doc => ({
@@ -94,21 +96,36 @@ export const Dashboard: React.FC = () => {
     }, (err) => handleFirestoreError(err, OperationType.LIST, 'users'));
 
     return () => {
-      // ... previous unsubscribes ...
       unsubRecent();
     };
   }, []);
 
-  const [kernelLogs, setKernelLogs] = useState<string[]>([
-    '>> RECV_PACKET_0x42: OK',
-    '>> AUTH_SYNC_COMPLETE',
-    '>> CRYPTO_LAYER_ACTIVE',
-    '>> FIREWALL_ENHANCED_V2',
-    '>> DIST_SYS_READY'
-  ]);
+  const [kernelLogs, setKernelLogs] = useState<string[]>(
+    lang === 'TR' ? [
+      '>> PAKET_ALINDI_0x42: TAMAM',
+      '>> KİMLİK_SENKRONİZASYONU_TAMAMLANDI',
+      '>> KRİPTO_KATMANI_AKTİF',
+      '>> GÜVENLİK_DUVARI_GELİŞTİRİLDİ_V2',
+      '>> DAĞITIK_SİSTEM_HAZIR'
+    ] : [
+      '>> RECV_PACKET_0x42: OK',
+      '>> AUTH_SYNC_COMPLETE',
+      '>> CRYPTO_LAYER_ACTIVE',
+      '>> FIREWALL_ENHANCED_V2',
+      '>> DIST_SYS_READY'
+    ]
+  );
 
   useEffect(() => {
-    const logs = [
+    const logs = lang === 'TR' ? [
+      '>> DÜĞÜMLER_TARANIYOR...',
+      '>> PAKET_İNCELENİYOR: TEMİZ',
+      '>> ŞİFRELEME_ÖZETİ_RSA4096',
+      '>> BULUT_DURUMU_SENKRONİZE_EDİLİYOR',
+      '>> TEHDİT_GEÇERSİZ_KILINDI_BÖLGE_C',
+      '>> ÖNBELLEK_TEMİZLEME_BAŞARILI',
+      '>> VERİTABANI_GECİKMESİ_OPTİMİZE_EDİLDİ'
+    ] : [
       '>> SCANNING_NODES...',
       '>> PACKET_INSPECT: CLEAN',
       '>> ENCRYPT_HASH_RSA4096',
@@ -126,13 +143,13 @@ export const Dashboard: React.FC = () => {
     }, 3000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [lang]);
 
   const stats = [
-    { label: 'Live Visitors', value: visitors, icon: Users, color: 'text-blue-400', sub: 'Active Sessions' },
-    { label: 'Chat Volume', value: statsData.messages, icon: MessageSquare, color: 'text-emerald-500', sub: 'Messages Processed' },
-    { label: 'Peak Score', value: statsData.topScore, icon: Trophy, color: 'text-amber-400', sub: 'Global High Score' },
-    { label: 'Stability Index', value: statsData.stability, icon: Activity, color: 'text-indigo-400', sub: 'System Health' },
+    { label: t('dashboard.live_visitors'), value: visitors, icon: Users, color: 'text-blue-400', sub: t('dashboard.active_sessions') },
+    { label: t('dashboard.chat_volume'), value: statsData.messages, icon: MessageSquare, color: 'text-emerald-500', sub: t('dashboard.messages_processed') },
+    { label: t('dashboard.peak_score'), value: statsData.topScore, icon: Trophy, color: 'text-amber-400', sub: t('dashboard.global_high_score') },
+    { label: t('dashboard.stability_index'), value: statsData.stability, icon: Activity, color: 'text-indigo-400', sub: t('dashboard.system_health') },
   ];
 
   return (
@@ -143,11 +160,11 @@ export const Dashboard: React.FC = () => {
       </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold font-mono text-emerald-500 tracking-tighter">
-          // PERFORMANCE_TRACKING
+          // {t('dashboard.performance')}
         </h2>
         <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
           <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-          <span className="text-[10px] text-emerald-400 font-mono font-bold tracking-widest uppercase">System Optimization In Progress</span>
+          <span className="text-[10px] text-emerald-400 font-mono font-bold tracking-widest uppercase">{t('dashboard.optimization')}</span>
         </div>
       </div>
 
@@ -178,13 +195,13 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h3 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2">
-                <TrendingUp size={12} className="text-emerald-500" /> Network Throughput
+                <TrendingUp size={12} className="text-emerald-500" /> {t('dashboard.throughput')}
               </h3>
-              <p className="text-2xl font-black italic tracking-tighter uppercase mt-1">Real-time Traffic</p>
+              <p className="text-2xl font-black italic tracking-tighter uppercase mt-1">{t('dashboard.traffic')}</p>
             </div>
             <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <span className="text-[9px] font-mono font-bold text-emerald-500 uppercase tracking-widest">Live Node</span>
+              <span className="text-[9px] font-mono font-bold text-emerald-500 uppercase tracking-widest">{t('dashboard.live_node')}</span>
             </div>
           </div>
           
@@ -234,14 +251,14 @@ export const Dashboard: React.FC = () => {
         <div className="bg-zinc-900 border border-apex-border rounded-3xl p-6 flex flex-col justify-between">
            <div>
              <h3 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2 mb-4">
-               <Zap size={12} className="text-amber-400" /> System Metrics
+               <Zap size={12} className="text-amber-400" /> {t('dashboard.metrics')}
              </h3>
              <div className="space-y-4">
                 {[
-                  { label: 'CPU Load', val: '12.4%', color: 'bg-emerald-500' },
-                  { label: 'Memory', val: '4.2GB / 16GB', color: 'bg-blue-500', pct: '26%' },
-                  { label: 'Security Firewall', val: 'Active (v4.1)', color: 'bg-amber-400', pct: '100%' },
-                  { label: 'Network Latency', val: '18ms', color: 'bg-indigo-500', pct: '15%' }
+                  { label: t('dashboard.cpu_load'), val: '12.4%', color: 'bg-emerald-500' },
+                  { label: t('dashboard.memory'), val: '4.2GB / 16GB', color: 'bg-blue-500', pct: '26%' },
+                  { label: t('dashboard.firewall'), val: lang === 'TR' ? 'Aktif (v4.1)' : 'Active (v4.1)', color: 'bg-amber-400', pct: '100%' },
+                  { label: t('dashboard.latency'), val: '18ms', color: 'bg-indigo-500', pct: '15%' }
                 ].map((m, i) => (
                   <div key={i}>
                     <div className="flex justify-between text-[10px] font-mono uppercase mb-1">
@@ -262,7 +279,7 @@ export const Dashboard: React.FC = () => {
            </div>
            
            <div className="mt-8 p-3 bg-black/40 border border-zinc-800 rounded-2xl">
-              <h4 className="text-[9px] font-mono font-bold text-zinc-600 uppercase mb-2">Live Kernel Status:</h4>
+              <h4 className="text-[9px] font-mono font-bold text-zinc-600 uppercase mb-2">{t('dashboard.kernel_status')}:</h4>
               <div className="space-y-1 overflow-hidden h-[80px]">
                  {kernelLogs.map((log, i) => (
                    <div key={i} className="text-[8px] font-mono text-emerald-500/60 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
@@ -273,7 +290,7 @@ export const Dashboard: React.FC = () => {
            </div>
 
            <button className="w-full py-3 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-black border border-emerald-500/20 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-6">
-             Hardened Reset
+             {t('dashboard.reset')}
            </button>
         </div>
       </div>
@@ -283,17 +300,17 @@ export const Dashboard: React.FC = () => {
         <div className="bg-apex-card border border-apex-border rounded-3xl overflow-hidden shadow-xl">
           <div className="p-4 border-bottom border-apex-border flex items-center justify-between bg-zinc-800/20">
             <h3 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-zinc-400">
-               Authorized Nodes
+               {t('dashboard.nodes_title')}
             </h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-zinc-800/30 text-[9px] uppercase font-mono text-zinc-500 tracking-widest border-b border-apex-border">
-                  <th className="px-4 py-3 font-bold">Node ID</th>
-                  <th className="px-4 py-3 font-bold">High Score</th>
-                  <th className="px-4 py-3 font-bold">Last Active</th>
-                  <th className="px-4 py-3 font-bold">State</th>
+                  <th className="px-4 py-3 font-bold">{t('dashboard.node_id')}</th>
+                  <th className="px-4 py-3 font-bold">{t('dashboard.peak_score')}</th>
+                  <th className="px-4 py-3 font-bold">{t('dashboard.last_active')}</th>
+                  <th className="px-4 py-3 font-bold">{t('dashboard.state')}</th>
                 </tr>
               </thead>
               <tbody className="text-[11px] font-mono">
@@ -306,7 +323,7 @@ export const Dashboard: React.FC = () => {
                     </td>
                     <td className="px-4 py-3">
                       <span className="px-2 py-0.5 rounded-full text-[9px] font-bold border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
-                        VERIFIED
+                        {lang === 'TR' ? 'DOĞRULANDI' : 'VERIFIED'}
                       </span>
                     </td>
                   </tr>
@@ -319,13 +336,13 @@ export const Dashboard: React.FC = () => {
         {/* Activity Log */}
         <div className="bg-apex-card border border-apex-border rounded-3xl p-6 shadow-xl">
           <h3 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] flex items-center gap-2 mb-6 border-b border-apex-border pb-4 text-zinc-400">
-            <History size={14} className="text-emerald-500" /> System Modules
+            <History size={14} className="text-emerald-500" /> {t('dashboard.modules')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
              {[
-                { name: 'Matrix BG', status: 'Active' },
-                { name: 'Dark Mode', status: 'Active' },
-                { name: 'Terminal', status: 'Authenticated' },
+                { name: t('dashboard.matrix_bg'), status: lang === 'TR' ? 'Aktif' : 'Active' },
+                { name: 'Dark Mode', status: lang === 'TR' ? 'Aktif' : 'Active' },
+                { name: 'Terminal', status: lang === 'TR' ? 'Doğrulandı' : 'Authenticated' },
                 { name: 'Encryption', status: 'MIL-SPEC' }
              ].map((m, i) => (
                 <div key={i} className="p-3 bg-zinc-800/30 border border-apex-border rounded-2xl flex justify-between items-center group hover:border-emerald-500/30 transition-all">
@@ -337,19 +354,19 @@ export const Dashboard: React.FC = () => {
           
           <div className="mt-8 pt-6 border-t border-apex-border">
              <h3 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] flex items-center gap-2 mb-4 text-zinc-400">
-                <Settings size={14} className="text-blue-500" /> Quick Preferences
+                <Settings size={14} className="text-blue-500" /> {t('dashboard.preferences')}
              </h3>
              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-zinc-500 font-medium">Automatic Optimization</span>
+                    <span className="text-xs text-zinc-500 font-medium">{t('dashboard.auto_opt')}</span>
                     <div className="w-8 h-4 bg-emerald-500 rounded-full relative"><div className="absolute right-0.5 top-0.5 w-3 h-3 bg-zinc-950 rounded-full" /></div>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-zinc-500 font-medium">Matrix Background Effect</span>
+                    <span className="text-xs text-zinc-500 font-medium">{t('dashboard.matrix_bg')}</span>
                     <div className="w-8 h-4 bg-emerald-500 rounded-full relative"><div className="absolute right-0.5 top-0.5 w-3 h-3 bg-zinc-950 rounded-full" /></div>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-zinc-500 font-medium">Session Logging</span>
+                    <span className="text-xs text-zinc-500 font-medium">{t('dashboard.logging')}</span>
                     <div className="w-8 h-4 bg-zinc-800 rounded-full relative"><div className="absolute left-0.5 top-0.5 w-3 h-3 bg-zinc-500 rounded-full" /></div>
                 </div>
              </div>
