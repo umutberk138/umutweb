@@ -20,7 +20,7 @@ export const AmbientSystem: React.FC = () => {
   }, [isPlaying]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-4 bg-zinc-950/90 p-3 rounded-2xl border border-white/5 backdrop-blur-xl shadow-2xl">
+    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-30 md:z-50 scale-75 md:scale-100 origin-bottom-right flex items-center gap-2 md:gap-4 bg-zinc-950/90 p-2 md:p-3 rounded-2xl border border-white/5 backdrop-blur-xl shadow-2xl">
       <div className="flex items-end gap-1 h-6 w-20 px-2 border-r border-white/5">
         {level.map((h, i) => (
           <div 

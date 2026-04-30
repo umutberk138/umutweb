@@ -79,13 +79,13 @@ export const PortfolioView: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto space-y-16 pb-24 pr-4">
       {/* Navigation */}
-      <nav id="navbar" className="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-3xl p-3 mb-12 hidden md:block shadow-2xl">
+      <nav id="navbar" className="sticky top-28 z-40 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-3xl p-3 mb-12 hidden md:block shadow-2xl">
         <ul className="flex justify-around items-center">
           {['about', 'experience', 'skills', 'projects', 'faq', 'contact'].map((id) => (
             <li key={id}>
               <button 
                 onClick={() => scrollTo(id)}
-                className="px-5 py-2 text-[10px] font-mono font-black uppercase tracking-[0.3em] text-zinc-500 hover:text-emerald-400 transition-all cursor-pointer hover:scale-105 active:scale-95"
+                className="px-5 py-3 text-xs md:text-sm font-mono font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-emerald-400 transition-all cursor-pointer hover:scale-105 active:scale-95"
               >
                 {t(`nav.${id}`)}
               </button>
@@ -95,7 +95,7 @@ export const PortfolioView: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="about" className="scroll-mt-24 glass-panel rounded-[40px] p-10 neon-border relative overflow-hidden group">
+      <section id="about" className="scroll-mt-48 glass-panel rounded-3xl md:rounded-[40px] p-6 md:p-10 neon-border relative overflow-hidden group">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 blur-[120px] pointer-events-none transition-all duration-1000 group-hover:bg-emerald-500/20" />
         <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
           <div className="relative group/avatar mt-10 md:mt-0">
@@ -116,16 +116,16 @@ export const PortfolioView: React.FC = () => {
                  {t('hero.status')}
                </span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 leading-[0.9] text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 leading-tight md:leading-[0.9] text-white mt-8 md:mt-0">
               {t('hero.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">İnce</span>
             </h1>
             <p className="text-zinc-400 font-medium leading-relaxed max-w-xl text-lg md:text-xl mb-10 border-l-4 border-emerald-500/30 pl-6 md:pl-8 italic">
               {t('hero.subtitle')}
             </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-6">
+            <div className="flex flex-col sm:flex-row items-center sm:justify-start gap-4 md:gap-6 w-full">
               <button 
                 onClick={() => scrollTo('contact')} 
-                className="px-10 py-5 bg-white text-zinc-950 font-black uppercase tracking-[0.2em] italic rounded-3xl hover:bg-emerald-500 hover:text-black transition-all shadow-3xl active:scale-95 duration-500"
+                className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-zinc-950 text-sm md:text-base font-black uppercase tracking-[0.2em] italic rounded-3xl hover:bg-emerald-500 hover:text-black transition-all shadow-3xl active:scale-95 duration-500 whitespace-nowrap"
               >
                 {t('hero.initiate')}
               </button>
@@ -137,7 +137,7 @@ export const PortfolioView: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex gap-8 mt-12 justify-center md:justify-start">
+            <div className="flex flex-wrap gap-6 md:gap-8 mt-10 md:mt-12 justify-center md:justify-start">
                {[
                  { label: t('hero.stat_exp'), target: 3, suffix: '+' },
                  { label: t('hero.stat_proj'), target: 12, suffix: '+' },
@@ -154,7 +154,7 @@ export const PortfolioView: React.FC = () => {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="scroll-mt-24">
+      <section id="experience" className="scroll-mt-48">
         <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-5 text-white">
           <Code2 size={32} className="text-emerald-500" /> {t('experience.title')}
         </h2>
@@ -166,9 +166,9 @@ export const PortfolioView: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15, duration: 0.8 }}
               viewport={{ once: true }}
-              className="glass-panel p-12 rounded-[48px] relative overflow-hidden group hover:neon-border transition-all duration-700"
+              className="glass-panel p-8 md:p-12 rounded-3xl md:rounded-[48px] relative overflow-hidden group hover:neon-border transition-all duration-700"
             >
-              <div className="absolute -top-10 -right-10 text-emerald-500/5 group-hover:text-emerald-500/10 transition-all duration-700 rotate-12">
+              <div className="absolute -top-10 -right-10 text-emerald-500/5 group-hover:text-emerald-500/10 transition-all duration-700 rotate-12 pointer-events-none">
                  <Shield size={200} />
               </div>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6 relative z-10">
@@ -184,7 +184,7 @@ export const PortfolioView: React.FC = () => {
                    <ChevronRight className="text-zinc-500 group-hover:text-emerald-400" />
                 </div>
               </div>
-              <p className="text-zinc-400 text-xl font-medium leading-relaxed max-w-4xl relative z-10 italic border-l-2 border-zinc-800 pl-8 group-hover:border-emerald-500/30 transition-colors">{exp.desc}</p>
+              <p className="text-zinc-400 text-lg md:text-xl font-medium leading-relaxed max-w-4xl relative z-10 italic border-l-2 border-zinc-800 pl-4 md:pl-8 group-hover:border-emerald-500/30 transition-colors">{exp.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -192,7 +192,7 @@ export const PortfolioView: React.FC = () => {
 
       {/* Skills & Education */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <section id="skills" className="scroll-mt-24">
+        <section id="skills" className="scroll-mt-48">
           <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-5 text-white">
             <Code2 size={32} className="text-emerald-500" /> {t('skills.title')}
           </h2>
@@ -223,7 +223,7 @@ export const PortfolioView: React.FC = () => {
           </div>
         </section>
 
-        <section id="education" className="scroll-mt-24">
+        <section id="education" className="scroll-mt-48">
            <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-5 text-white">
              <GraduationCap size={32} className="text-emerald-500" /> {lang === 'TR' ? 'Eğitim' : 'Education'}
            </h2>
@@ -249,7 +249,7 @@ export const PortfolioView: React.FC = () => {
       </div>
 
       {/* Projects Section */}
-      <section id="projects" className="scroll-mt-24">
+      <section id="projects" className="scroll-mt-48">
         <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-5 text-white">
           <FolderRoot size={32} className="text-emerald-500" /> {t('projects.title')}
         </h2>
@@ -276,7 +276,7 @@ export const PortfolioView: React.FC = () => {
               <p className="text-zinc-500 mb-10 font-medium leading-relaxed text-[15px] flex-grow">
                 {project.desc}
               </p>
-              <div className="flex flex-wrap gap-2 relative z-10 mt-auto">
+              <div className="flex flex-wrap gap-2 relative z-10 mt-auto pb-2">
                 {project.tech.map((t, j) => (
                   <span key={j} className="text-[9px] font-mono font-black bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 text-emerald-400 uppercase tracking-[0.2em]">{t}</span>
                 ))}
@@ -287,7 +287,7 @@ export const PortfolioView: React.FC = () => {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="scroll-mt-24">
+      <section id="faq" className="scroll-mt-48">
         <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-10 flex items-center gap-5 text-white">
           <MessageSquare size={32} className="text-emerald-500" /> {t('nav.faq')}
         </h2>
@@ -305,7 +305,7 @@ export const PortfolioView: React.FC = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="scroll-mt-24">
+      <section id="contact" className="scroll-mt-48">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
            <div>
              <h2 className="text-6xl font-black italic uppercase tracking-tighter mb-8 leading-[0.8] text-white">
